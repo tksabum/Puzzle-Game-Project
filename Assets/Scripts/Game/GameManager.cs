@@ -284,7 +284,9 @@ public class GameManager : MonoBehaviour
 
     public void MovePortal(Vector2Int portalidx)
     {
-        Debug.Log("Æ÷Å»ÀÌµ¿!!");
+        Vector2Int nextPos = blockManager.GetPortalExit(playeridx);
+        playeridx = nextPos;
+        player.transform.position = (Vector2)nextPos;
     }
 
     void addLife(int value)

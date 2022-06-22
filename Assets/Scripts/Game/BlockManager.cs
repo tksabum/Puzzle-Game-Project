@@ -31,6 +31,7 @@ public class BlockManager : MonoBehaviour
     public GameManager gameManager;
 
     Dictionary<Vector2Int, List<Vector2Int>> powerDic;
+    Dictionary<Vector2Int, Vector2Int> portalDic;
 
     public enum Obj { EMPTY, PLAYER, WOODENBOX, GOAL, HAMMER };
     public enum Direction { LEFT, RIGHT, UP, DOWN };
@@ -247,6 +248,11 @@ public class BlockManager : MonoBehaviour
         }
     }
 
+    public Vector2Int GetPortalExit(Vector2Int entrance)
+    {
+        return portalDic[entrance];
+    }
+
     public void SetBlock(MapData data)
     {
         mapData = data;
@@ -312,6 +318,15 @@ public class BlockManager : MonoBehaviour
             }
 
             powerDic.Add(new Vector2Int(key.x, key.y), list);
+        }
+
+        portalDic = new Dictionary<Vector2Int, Vector2Int>();
+        foreach(KeyValuePair<PairInt, PairInt> keyValuePair in mapData.portalData)
+        {
+            PairInt key = keyValuePair.Key;
+            PairInt value = keyValuePair.Value;
+
+            portalDic.Add(new Vector2Int(key.x, key.y), new Vector2Int(value.x, value.y));
         }
 
         // 아이템이 올려져 있는 버튼과 같은 floor들을 작동시키기 위해 OnObjectEnter 실행
