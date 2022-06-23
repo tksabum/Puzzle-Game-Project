@@ -17,7 +17,7 @@ public class InputManager
 {
     public Dictionary<CustomKeyCode, KeyCode> keyDic = new Dictionary<CustomKeyCode, KeyCode>();
 
-    KeyCode[] defaultKeyCode = { KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S, KeyCode.Space };
+    public KeyCode[] defaultKeyCode = { KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S, KeyCode.Space };
 
     private InputManager()
     {
@@ -56,7 +56,7 @@ public class KeySettingManager : MonoBehaviour
     {
         for (int i = 0; i < keySets.Count; i++)
         {
-            keySets[i].keyCodeText.text = ((KeyCode)PlayerPrefs.GetInt("CustomKeyCode" + (int)keySets[i].action)).ToString();
+            keySets[i].keyCodeText.text = ((KeyCode)PlayerPrefs.GetInt("CustomKeyCode" + (int)keySets[i].action, (int)InputManager.Instance.defaultKeyCode[i])).ToString();
             
         }
     }

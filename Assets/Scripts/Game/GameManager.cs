@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
             mapName = testMapName;
         }
 
-        dataPath = "Assets/MapData/" + mapName + ".dat";
+        dataPath = Application.dataPath + "/MapData/" + mapName + ".dat";
 
         mapData = Load();
 
@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
             targetPos.y = centerPos.y;
         }
         targetPos.z = mainCamera.transform.position.z;
-        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPos, 0.005f);
+        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPos, 0.1f);
     }
 
     private void Init()
@@ -437,7 +437,7 @@ public class GameManager : MonoBehaviour
         mapName = nextMapName;
 
 
-        dataPath = "Assets/MapData/" + mapName + ".dat";
+        dataPath = Application.dataPath + "/MapData/" + mapName + ".dat";
 
         mapData = Load();
 
