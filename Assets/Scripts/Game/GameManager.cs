@@ -225,8 +225,8 @@ public class GameManager : MonoBehaviour
                     playerWalk = true;
                     playerAnimator.SetBool("walking", playerWalk);
 
-                    // 이동 후 처리
-                    blockManager.MoveEvent(BlockManager.Obj.PLAYER, nowidx, nextidx);
+                    // 이동 전 처리
+                    blockManager.PreMoveEvent(BlockManager.Obj.PLAYER, nowidx, nextidx);
                 }
             }
             else
@@ -251,6 +251,7 @@ public class GameManager : MonoBehaviour
                 {
                     player.transform.position = (Vector2)walkEndPos;
                     playerWalk = false;
+                    blockManager.PostMoveEvent(BlockManager.Obj.PLAYER, walkStartPos, walkEndPos);
                 }
             }
 

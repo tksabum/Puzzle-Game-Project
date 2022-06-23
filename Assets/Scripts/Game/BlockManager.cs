@@ -151,6 +151,44 @@ public class BlockManager : MonoBehaviour
     }
     
     // 이동시 이벤트는 Exit -> Enter 순서로 처리한다.
+    public void PreMoveEvent(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
+    {
+        // item
+        Itembase nextitem = itemList[nextidx.x][nextidx.y];
+        if (nextitem != null)
+        {
+            if (nextitem.pushable)
+            {
+                Vector2Int pushidx = 2 * nextidx - nowidx;
+                itemList[pushidx.x][pushidx.y] = nextitem;
+                itemList[nextidx.x][nextidx.y] = null;
+                nextitem.transform.position = new Vector3Int(pushidx.x, pushidx.y, 0);
+                floorList[nextidx.x][nextidx.y].OnObjectExit(gameManager, this, nextitem.obj);
+                floorList[pushidx.x][pushidx.y].OnObjectEnter(gameManager, this, nextitem.obj);
+            }
+        }
+    }
+
+    public void PostMoveEvent(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
+    {
+        // item
+        Itembase nextitem = itemList[nextidx.x][nextidx.y];
+        if (nextitem != null)
+        {
+            if (nextitem.getable)
+            {
+                nextitem.OnPlayerEnter(gameManager);
+                itemList[nextidx.x][nextidx.y] = null;
+                objectPool.ReturnObject(nextitem.gameObject);
+            }
+        }
+
+        // floor
+        floorList[nowidx.x][nowidx.y].OnObjectExit(gameManager, this, obj);
+        floorList[nextidx.x][nextidx.y].OnObjectEnter(gameManager, this, obj);
+    }
+
+
     public void MoveEvent(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
     {
         // item
@@ -321,12 +359,15 @@ public class BlockManager : MonoBehaviour
         }
 
         portalDic = new Dictionary<Vector2Int, Vector2Int>();
-        foreach(KeyValuePair<PairInt, PairInt> keyValuePair in mapData.portalData)
+        if (mapData.portalData != null)
         {
-            PairInt key = keyValuePair.Key;
-            PairInt value = keyValuePair.Value;
+            foreach (KeyValuePair<PairInt, PairInt> keyValuePair in mapData.portalData)
+            {
+                PairInt key = keyValuePair.Key;
+                PairInt value = keyValuePair.Value;
 
-            portalDic.Add(new Vector2Int(key.x, key.y), new Vector2Int(value.x, value.y));
+                portalDic.Add(new Vector2Int(key.x, key.y), new Vector2Int(value.x, value.y));
+            }
         }
 
         // 아이템이 올려져 있는 버튼과 같은 floor들을 작동시키기 위해 OnObjectEnter 실행
