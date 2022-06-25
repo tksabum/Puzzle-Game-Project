@@ -1147,6 +1147,7 @@ MonoBehaviour:
   - {fileID: 6517240182617039132, guid: ec7b8ff065fd2f947b3b95eebb43b2b6, type: 3}
   - {fileID: 6517240182617039132, guid: 88579aada0280754d8bf96dfb40e7b62, type: 3}
   - {fileID: 3196312527637588017, guid: 63067eda528a50b4983efbf295155991, type: 3}
+  - {fileID: 4782004500515657041, guid: b6226df64fb34c14c925d7d4df6f33eb, type: 3}
   floorgroup: {fileID: 962888593}
   itemgroup: {fileID: 1475560371}
 --- !u!1 &802192101
