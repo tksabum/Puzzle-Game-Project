@@ -265,6 +265,10 @@ public class GameManager : MonoBehaviour
         {
             preparedItem = BlockManager.Obj.HAMMER;
         }
+        else if (obj == BlockManager.Obj.LIFE)
+        {
+            addLife(1);
+        }
         else
         {
             throw new System.Exception("Error:get wrong item");

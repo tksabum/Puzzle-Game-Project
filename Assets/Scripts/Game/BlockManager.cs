@@ -33,7 +33,7 @@ public class BlockManager : MonoBehaviour
     Dictionary<Vector2Int, List<Vector2Int>> powerDic;
     Dictionary<Vector2Int, Vector2Int> portalDic;
 
-    public enum Obj { EMPTY, PLAYER, WOODENBOX, GOAL, HAMMER };
+    public enum Obj { EMPTY, PLAYER, WOODENBOX, GOAL, HAMMER, LIFE };
     public enum Direction { LEFT, RIGHT, UP, DOWN };
 
     int mapwidth;
