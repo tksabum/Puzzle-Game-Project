@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     Vector2Int walkEndPos;
     
     Vector2Int startidx;
+    int startlife;
     int maxlife;
 
     Vector2Int playeridx;
@@ -64,8 +65,9 @@ public class GameManager : MonoBehaviour
 
         mapData = Load();
 
-        startidx = new Vector2Int(mapData.startidx.x, mapData.startidx.y);
-        maxlife = mapData.maxlife;
+        startidx = new Vector2Int(mapData.startIdx.x, mapData.startIdx.y);
+        startlife = mapData.startLife;
+        maxlife = mapData.maxLife;
 
         Init();
 
@@ -146,7 +148,7 @@ public class GameManager : MonoBehaviour
     {
         // 변수 초기화
         playeridx = startidx;
-        life = maxlife;
+        life = startlife;
         preparedItem = BlockManager.Obj.EMPTY;
 
         // 플레이어 초기화
@@ -445,8 +447,8 @@ public class GameManager : MonoBehaviour
 
         mapData = Load();
 
-        startidx = new Vector2Int(mapData.startidx.x, mapData.startidx.y);
-        maxlife = mapData.maxlife;
+        startidx = new Vector2Int(mapData.startIdx.x, mapData.startIdx.y);
+        maxlife = mapData.maxLife;
 
         Init();
 

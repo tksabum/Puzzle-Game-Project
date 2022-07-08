@@ -18,6 +18,8 @@ public class PairInt
     }
 }
 
+/*
+
 [System.Serializable]
 public class MapData
 {
@@ -27,9 +29,27 @@ public class MapData
     public int mapHeight;
     public List<List<string>> floorData;
     public List<List<string>> itemData;
-    public Dictionary<PairInt, List<PairInt>> powerData;
     public PairInt startidx;
     public int maxlife;
+    public Dictionary<PairInt, List<PairInt>> powerData;
+    public Dictionary<PairInt, PairInt> portalData;
+}
+
+ */
+
+[System.Serializable]
+public class MapData
+{
+    public string appVersion;
+    public string mapDesigner;
+    public PairInt startIdx;
+    public int startLife;
+    public int maxLife;
+    public int mapWidth;
+    public int mapHeight;
+    public List<List<string>> floorData;
+    public List<List<string>> itemData;
+    public Dictionary<PairInt, List<PairInt>> powerData;
     public Dictionary<PairInt, PairInt> portalData;
 }
 
@@ -41,6 +61,8 @@ public class MapEditor : MonoBehaviour
 
     [Header("- Player -")]
     public Vector2Int startidx;
+    [Range(1, 5)]
+    public int startlife;
     [Range(1, 5)]
     public int maxlife;
 
@@ -92,6 +114,9 @@ public class MapEditor : MonoBehaviour
         MapData mapData = new MapData();
         mapData.appVersion = Application.version;
         mapData.mapDesigner = "BeomJoon";
+        mapData.startIdx = new PairInt(startidx.x, startidx.y);
+        mapData.startLife = startlife;
+        mapData.maxLife = maxlife;
         mapData.mapWidth = mapwidth;
         mapData.mapHeight = mapheight;
 
@@ -129,9 +154,6 @@ public class MapEditor : MonoBehaviour
             }
             mapData.powerData.Add(key, value);
         }
-
-        mapData.startidx = new PairInt(startidx.x, startidx.y);
-        mapData.maxlife = maxlife;
 
         mapData.portalData = new Dictionary<PairInt, PairInt>();
         foreach(KeyValuePair<Vector2Int, Vector2Int> pair in portalDic)
