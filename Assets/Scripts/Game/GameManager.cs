@@ -448,6 +448,7 @@ public class GameManager : MonoBehaviour
         mapData = Load();
 
         startidx = new Vector2Int(mapData.startIdx.x, mapData.startIdx.y);
+        startlife = mapData.startLife;
         maxlife = mapData.maxLife;
 
         Init();
