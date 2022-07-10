@@ -57,8 +57,8 @@ MonoBehaviour:
   rightExitable: 0
   upExitable: 1
   downExitable: 0
-  spriteOn: {fileID: -1267625620, guid: 149e0d9ef17a07f4fb76f05500bcb37d, type: 3}
-  spriteOff: {fileID: -1491493513, guid: 149e0d9ef17a07f4fb76f05500bcb37d, type: 3}
+  spriteOn: {fileID: -1491493513, guid: 149e0d9ef17a07f4fb76f05500bcb37d, type: 3}
+  spriteOff: {fileID: -1267625620, guid: 149e0d9ef17a07f4fb76f05500bcb37d, type: 3}
   powerType: 1
   powerDefault: 0
 --- !u!212 &5767402515543410049
