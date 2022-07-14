@@ -231,9 +231,11 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                // 애니메이션 정지
                 playerWalk = false;
-
                 playerAnimator.SetBool("walking", playerWalk);
+
+                return;
             }
 
             playerAnimator.SetFloat("DirX", (float)moveDir.x);
@@ -251,6 +253,7 @@ public class GameManager : MonoBehaviour
                 walkEndPos = nextidx;
 
                 moveType = MoveType.WALK;
+                moveState = MoveState.PREANIME;
 
                 // 이동 전 이벤트 처리
                 blockManager.PreMoveEvent(BlockManager.Obj.PLAYER, nowidx, nextidx);
@@ -308,10 +311,6 @@ public class GameManager : MonoBehaviour
             {
                 // walk는 이동 후 동작이 없음
                 moveState = MoveState.INPUT;
-
-                // 애니메이션 정지
-                playerWalk = false;
-                playerAnimator.SetBool("walking", playerWalk);
 
                 // 이동 후 이벤트 처리
                 blockManager.PostMoveEvent(BlockManager.Obj.PLAYER, walkStartPos, walkEndPos);
