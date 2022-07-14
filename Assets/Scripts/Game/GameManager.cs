@@ -7,6 +7,19 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+enum MoveState
+{
+    INPUT,
+    PREANIME,
+    ANIME,
+    POSTANIME
+}
+
+enum MoveType
+{
+    WALK
+}
+
 public class GameManager : MonoBehaviour
 {
     [Header("- UI -")]
@@ -51,6 +64,9 @@ public class GameManager : MonoBehaviour
 
     MapData mapData;
 
+    MoveState moveState;
+    MoveType moveType;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -73,7 +89,7 @@ public class GameManager : MonoBehaviour
 
         blockManager.SetBlock(mapData);
 
-        StartCoroutine(CoroutineMove());
+        //StartCoroutine(CoroutineMove());
     }
 
     // Update is called once per frame
@@ -85,6 +101,41 @@ public class GameManager : MonoBehaviour
         }
 
         // 아이템 사용
+        UseItem();
+
+        // 카메라
+        UpdateCamera();
+
+        // 이동 처리
+        Move();
+    }
+
+    private void Init()
+    {
+        // 변수 초기화
+        playeridx = startidx;
+        life = startlife;
+        preparedItem = BlockManager.Obj.EMPTY;
+        moveState = MoveState.INPUT;
+        moveType = MoveType.WALK;
+
+        // 플레이어 초기화
+        player.transform.position = (Vector2)playeridx;
+        playerDirection = BlockManager.Direction.DOWN;
+        playerWalk = false;
+
+        //애니메이터 초기화
+        playerAnimator.SetBool("walking", playerWalk);
+        playerAnimator.SetFloat("DirX", 0f);
+        playerAnimator.SetFloat("DirY", -1f);
+
+        // UI 초기화
+        pauseButton.interactable = true;
+        uiManager.Reset(life, mapName, preparedItem);
+    }
+
+    void UseItem()
+    {
         if (!playerWalk && preparedItem != BlockManager.Obj.EMPTY && Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.USE_ITEM]))
         {
             if (preparedItem == BlockManager.Obj.HAMMER)
@@ -97,7 +148,10 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
 
+    void UpdateCamera()
+    {
         // 카메라 줌
         float cameraHeight = mainCamera.orthographicSize;
         float cameraWidth = mainCamera.aspect * mainCamera.orthographicSize;
@@ -113,7 +167,7 @@ public class GameManager : MonoBehaviour
         float maxCameraSizeTotal = Mathf.Clamp(Mathf.Max(maxCameraSizeHeight, maxCameraSizeWidth), minCameraSize, maxCameraSize);
 
         mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize - scroll, minCameraSize, maxCameraSizeTotal);
-        
+
         /* 카메라 크기 조정에 필요
         if(scroll != 0f)
         {
@@ -144,26 +198,125 @@ public class GameManager : MonoBehaviour
         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPos, 0.1f);
     }
 
-    private void Init()
+
+    // 이동 전, 이동 후 애니메이션을 추가할 때는
+    // INPUT에서 입력 받은 후, 주변 block으로 어떤 이동방식을 사용하는지
+    // 기본이동, 달리기, 점프 등으로 구분해 저장해 두었다가 그에 맞는 애니메이션을 재생하면 될 듯
+    void Move()
     {
-        // 변수 초기화
-        playeridx = startidx;
-        life = startlife;
-        preparedItem = BlockManager.Obj.EMPTY;
+        // 입력
+        if (moveState == MoveState.INPUT)
+        {
+            Vector2Int moveDir = Vector2Int.zero;
 
-        // 플레이어 초기화
-        player.transform.position = (Vector2)playeridx;
-        playerDirection = BlockManager.Direction.DOWN;
-        playerWalk = false;
+            if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.RIGHT]))
+            {
+                moveDir = Vector2Int.right;
+                playerDirection = BlockManager.Direction.RIGHT;
+            }
+            else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.LEFT]))
+            {
+                moveDir = Vector2Int.left;
+                playerDirection = BlockManager.Direction.LEFT;
+            }
+            else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.UP]))
+            {
+                moveDir = Vector2Int.up;
+                playerDirection = BlockManager.Direction.UP;
+            }
+            else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.DOWN]))
+            {
+                moveDir = Vector2Int.down;
+                playerDirection = BlockManager.Direction.DOWN;
+            }
+            else
+            {
+                playerWalk = false;
 
-        //애니메이터 초기화
-        playerAnimator.SetBool("walking", playerWalk);
-        playerAnimator.SetFloat("DirX", 0f);
-        playerAnimator.SetFloat("DirY", -1f);
+                playerAnimator.SetBool("walking", playerWalk);
+            }
 
-        // UI 초기화
-        pauseButton.interactable = true;
-        uiManager.Reset(life, mapName, preparedItem);
+            playerAnimator.SetFloat("DirX", (float)moveDir.x);
+            playerAnimator.SetFloat("DirY", (float)moveDir.y);
+
+            Vector2Int nowidx = playeridx;
+            Vector2Int nextidx = playeridx + moveDir;
+
+            // 갈 수 있는 위치인지 체크
+            if (blockManager.Movable(BlockManager.Obj.PLAYER, nowidx, nextidx))
+            {
+                // 갈 수 있다면 이동
+                playeridx = nextidx;
+                walkStartPos = nowidx;
+                walkEndPos = nextidx;
+
+                moveType = MoveType.WALK;
+
+                // 이동 전 이벤트 처리
+                blockManager.PreMoveEvent(BlockManager.Obj.PLAYER, nowidx, nextidx);
+            }
+        }
+        
+        // 이동 전 애니메이션
+        if (moveState == MoveState.PREANIME)
+        {
+            if (moveType == MoveType.WALK)
+            {
+                // walk는 이동 전 동작이 없음
+                moveState = MoveState.ANIME;
+            }
+        }
+
+        // 이동 중 애니메이션
+        if (moveState == MoveState.ANIME)
+        {
+            if (moveType == MoveType.WALK)
+            {
+                // 애니메이션 재생
+                playerWalk = true;
+                playerAnimator.SetBool("walking", playerWalk);
+
+                // 위치 이동
+                Vector3 nextPos = player.transform.position + (playerSpeed * (Vector3)(Vector2)(walkEndPos - walkStartPos) * Time.deltaTime);
+
+                float nextPosXY = nextPos.y;
+                float playPosXY = player.transform.position.y;
+                float endPosXY = walkEndPos.y;
+                if (playerDirection == BlockManager.Direction.LEFT || playerDirection == BlockManager.Direction.RIGHT)
+                {
+                    nextPosXY = nextPos.x;
+                    playPosXY = player.transform.position.x;
+                    endPosXY = walkEndPos.x;
+                }
+
+                if (((endPosXY - playPosXY) > 0 && nextPosXY < endPosXY) || ((endPosXY - playPosXY) < 0 && nextPosXY > endPosXY))
+                {
+                    player.transform.position = nextPos;
+                }
+                else
+                {
+                    player.transform.position = (Vector2)walkEndPos;
+                    moveState = MoveState.POSTANIME;
+                }
+            }
+        }
+
+        // 이동 후 애니메이션
+        if (moveState == MoveState.POSTANIME)
+        {
+            if (moveType == MoveType.WALK)
+            {
+                // walk는 이동 후 동작이 없음
+                moveState = MoveState.INPUT;
+
+                // 애니메이션 정지
+                playerWalk = false;
+                playerAnimator.SetBool("walking", playerWalk);
+
+                // 이동 후 이벤트 처리
+                blockManager.PostMoveEvent(BlockManager.Obj.PLAYER, walkStartPos, walkEndPos);
+            }
+        }
     }
 
     IEnumerator CoroutineMove()
