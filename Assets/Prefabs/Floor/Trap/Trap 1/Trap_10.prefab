@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -56,6 +57,7 @@ MonoBehaviour:
   rightExitable: 0
   upExitable: 1
   downExitable: 1
+  floorType: 3
   spriteOn: {fileID: 1781892945650459933, guid: e75850bd71e3f1c48aae78700faf1f91, type: 3}
   spriteOff: {fileID: -4618010394198347881, guid: e75850bd71e3f1c48aae78700faf1f91, type: 3}
   powerType: 0
@@ -71,6 +73,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

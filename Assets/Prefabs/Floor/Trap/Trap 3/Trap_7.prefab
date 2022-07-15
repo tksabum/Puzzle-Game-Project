@@ -57,6 +57,7 @@ MonoBehaviour:
   rightExitable: 0
   upExitable: 0
   downExitable: 1
+  floorType: 3
   spriteOn: {fileID: -8612709743352899840, guid: e75850bd71e3f1c48aae78700faf1f91, type: 3}
   spriteOff: {fileID: -5204395479518682181, guid: e75850bd71e3f1c48aae78700faf1f91, type: 3}
   powerType: 0

@@ -169,6 +169,13 @@ public class BlockManager : MonoBehaviour
         }
     }
 
+    public void MoveEvent(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
+    {
+
+
+
+    }
+
     public void PostMoveEvent(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
     {
         // item
@@ -184,39 +191,16 @@ public class BlockManager : MonoBehaviour
         }
 
         // floor
-        floorList[nowidx.x][nowidx.y].OnObjectExit(gameManager, this, obj);
-        floorList[nextidx.x][nextidx.y].OnObjectEnter(gameManager, this, obj);
-    }
+        Floorbase nowfloor = floorList[nowidx.x][nowidx.y];
+        Floorbase nextfloor = floorList[nextidx.x][nextidx.y];
 
-
-    public void MoveEvent(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
-    {
-        // item
-        Itembase nextitem = itemList[nextidx.x][nextidx.y];
-        if (nextitem != null)
+        if (MyFunctions.MyFunctions.SameAtLeastOne(nowfloor.floorType, FloorType.PLANE, FloorType.WATER, FloorType.BUTTON, FloorType.TRAP, FloorType.PORTAL))
         {
-            if (nextitem.getable)
-            {
-                nextitem.OnPlayerEnter(gameManager);
-                itemList[nextidx.x][nextidx.y] = null;
-                objectPool.ReturnObject(nextitem.gameObject);
-            }
-            else if (nextitem.pushable)
-            {
-                Vector2Int pushidx = 2 * nextidx - nowidx;
-                itemList[pushidx.x][pushidx.y] = nextitem;
-                itemList[nextidx.x][nextidx.y] = null;
-                nextitem.transform.position = new Vector3Int(pushidx.x, pushidx.y, 0);
-                floorList[nextidx.x][nextidx.y].OnObjectExit(gameManager, this, nextitem.obj);
-                floorList[pushidx.x][pushidx.y].OnObjectEnter(gameManager, this, nextitem.obj);
-            }
-            else
-            {
-                throw new System.Exception("이동할 수 없는 아이템을 이동시킴");
-            }
+            // floortype에 따라서 enter, exit 이벤트 추가필요
         }
 
-        // floor
+
+
         floorList[nowidx.x][nowidx.y].OnObjectExit(gameManager, this, obj);
         floorList[nextidx.x][nextidx.y].OnObjectEnter(gameManager, this, obj);
     }

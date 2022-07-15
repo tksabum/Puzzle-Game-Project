@@ -57,6 +57,7 @@ MonoBehaviour:
   rightExitable: 1
   upExitable: 0
   downExitable: 1
+  floorType: 2
   spritePressed: {fileID: -3814991329465442402, guid: 194278ce5da9082478fc3146d9f1f1cb, type: 3}
   spriteReleased: {fileID: 1566552715412073297, guid: 194278ce5da9082478fc3146d9f1f1cb, type: 3}
 --- !u!212 &5928950904668472974

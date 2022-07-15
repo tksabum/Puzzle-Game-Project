@@ -207,114 +207,147 @@ public class GameManager : MonoBehaviour
         // 입력
         if (moveState == MoveState.INPUT)
         {
-            Vector2Int moveDir = Vector2Int.zero;
-
-            if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.RIGHT]))
-            {
-                moveDir = Vector2Int.right;
-                playerDirection = BlockManager.Direction.RIGHT;
-            }
-            else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.LEFT]))
-            {
-                moveDir = Vector2Int.left;
-                playerDirection = BlockManager.Direction.LEFT;
-            }
-            else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.UP]))
-            {
-                moveDir = Vector2Int.up;
-                playerDirection = BlockManager.Direction.UP;
-            }
-            else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.DOWN]))
-            {
-                moveDir = Vector2Int.down;
-                playerDirection = BlockManager.Direction.DOWN;
-            }
-            else
-            {
-                // 애니메이션 정지
-                playerWalk = false;
-                playerAnimator.SetBool("walking", playerWalk);
-
-                return;
-            }
-
-            playerAnimator.SetFloat("DirX", (float)moveDir.x);
-            playerAnimator.SetFloat("DirY", (float)moveDir.y);
-
-            Vector2Int nowidx = playeridx;
-            Vector2Int nextidx = playeridx + moveDir;
-
-            // 갈 수 있는 위치인지 체크
-            if (blockManager.Movable(BlockManager.Obj.PLAYER, nowidx, nextidx))
-            {
-                // 갈 수 있다면 이동
-                playeridx = nextidx;
-                walkStartPos = nowidx;
-                walkEndPos = nextidx;
-
-                moveType = MoveType.WALK;
-                moveState = MoveState.PREANIME;
-
-                // 이동 전 이벤트 처리
-                blockManager.PreMoveEvent(BlockManager.Obj.PLAYER, nowidx, nextidx);
-            }
+            MoveStateInput();
         }
         
         // 이동 전 애니메이션
         if (moveState == MoveState.PREANIME)
         {
-            if (moveType == MoveType.WALK)
-            {
-                // walk는 이동 전 동작이 없음
-                moveState = MoveState.ANIME;
-            }
+            MoveStatePreAnime();
         }
 
         // 이동 중 애니메이션
         if (moveState == MoveState.ANIME)
         {
-            if (moveType == MoveType.WALK)
-            {
-                // 애니메이션 재생
-                playerWalk = true;
-                playerAnimator.SetBool("walking", playerWalk);
-
-                // 위치 이동
-                Vector3 nextPos = player.transform.position + (playerSpeed * (Vector3)(Vector2)(walkEndPos - walkStartPos) * Time.deltaTime);
-
-                float nextPosXY = nextPos.y;
-                float playPosXY = player.transform.position.y;
-                float endPosXY = walkEndPos.y;
-                if (playerDirection == BlockManager.Direction.LEFT || playerDirection == BlockManager.Direction.RIGHT)
-                {
-                    nextPosXY = nextPos.x;
-                    playPosXY = player.transform.position.x;
-                    endPosXY = walkEndPos.x;
-                }
-
-                if (((endPosXY - playPosXY) > 0 && nextPosXY < endPosXY) || ((endPosXY - playPosXY) < 0 && nextPosXY > endPosXY))
-                {
-                    player.transform.position = nextPos;
-                }
-                else
-                {
-                    player.transform.position = (Vector2)walkEndPos;
-                    moveState = MoveState.POSTANIME;
-                }
-            }
+            MoveStateAnime();
         }
 
         // 이동 후 애니메이션
         if (moveState == MoveState.POSTANIME)
         {
-            if (moveType == MoveType.WALK)
-            {
-                // walk는 이동 후 동작이 없음
-                moveState = MoveState.INPUT;
+            MoveStatePostAnime();
+        }
+    }
 
-                // 이동 후 이벤트 처리
-                blockManager.PostMoveEvent(BlockManager.Obj.PLAYER, walkStartPos, walkEndPos);
+    void MoveStateInput()
+    {
+        Vector2Int moveDir = Vector2Int.zero;
+
+        if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.RIGHT]))
+        {
+            moveDir = Vector2Int.right;
+            playerDirection = BlockManager.Direction.RIGHT;
+        }
+        else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.LEFT]))
+        {
+            moveDir = Vector2Int.left;
+            playerDirection = BlockManager.Direction.LEFT;
+        }
+        else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.UP]))
+        {
+            moveDir = Vector2Int.up;
+            playerDirection = BlockManager.Direction.UP;
+        }
+        else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.DOWN]))
+        {
+            moveDir = Vector2Int.down;
+            playerDirection = BlockManager.Direction.DOWN;
+        }
+        else
+        {
+            // 애니메이션 정지
+            playerWalk = false;
+            playerAnimator.SetBool("walking", playerWalk);
+
+            return;
+        }
+
+        playerAnimator.SetFloat("DirX", (float)moveDir.x);
+        playerAnimator.SetFloat("DirY", (float)moveDir.y);
+
+        Vector2Int nowidx = playeridx;
+        Vector2Int nextidx = playeridx + moveDir;
+
+        // 갈 수 있는 위치인지 체크
+        if (blockManager.Movable(BlockManager.Obj.PLAYER, nowidx, nextidx))
+        {
+            // 갈 수 있다면 이동
+            walkStartPos = nowidx;
+            walkEndPos = nextidx;
+
+            moveType = MoveType.WALK;
+            moveState = MoveState.PREANIME;
+        }
+    }
+
+    void MoveStatePreAnime()
+    {
+        if (moveType == MoveType.WALK)
+        {
+            // walk는 이동 전 동작이 없음
+            moveState = MoveState.ANIME;
+
+            // 이동 전 이벤트 처리
+            blockManager.PreMoveEvent(BlockManager.Obj.PLAYER, walkStartPos, walkEndPos);
+        }
+    }
+
+    void MoveStateAnime()
+    {
+        if (moveType == MoveType.WALK)
+        {
+            // 애니메이션 재생
+            playerWalk = true;
+            playerAnimator.SetBool("walking", playerWalk);
+
+            // 위치 이동
+            Vector3 nextPos = player.transform.position + (playerSpeed * (Vector3)(Vector2)(walkEndPos - walkStartPos) * Time.deltaTime);
+
+            float nextPosXY = nextPos.y;
+            float playPosXY = player.transform.position.y;
+            float startPosXY = walkStartPos.y;
+            float endPosXY = walkEndPos.y;
+
+            int playeridxXY = playeridx.y;
+
+            if (playerDirection == BlockManager.Direction.LEFT || playerDirection == BlockManager.Direction.RIGHT)
+            {
+                nextPosXY = nextPos.x;
+                playPosXY = player.transform.position.x;
+                startPosXY = walkStartPos.x;
+                endPosXY = walkEndPos.x;
+                playeridxXY = playeridx.x;
             }
+
+            if (((endPosXY - playPosXY) > 0 && nextPosXY < endPosXY) || ((endPosXY - playPosXY) < 0 && nextPosXY > endPosXY))
+            {
+                // 남은 이동거리가 이동한 거리보다 짧을 경우 위치 판정 이동
+                if (playeridxXY != endPosXY && Mathf.Abs(endPosXY - nextPosXY) < Mathf.Abs(nextPosXY - startPosXY))
+                {
+                    playeridx = walkEndPos;
+
+                    // 이동 중 이벤트 처리
+                    blockManager.MoveEvent(BlockManager.Obj.PLAYER, walkStartPos, walkEndPos);
+                }
+                player.transform.position = nextPos;
+            }
+            else
+            {
+                player.transform.position = (Vector2)walkEndPos;
+                moveState = MoveState.POSTANIME;
+            }
+        }
+    }
+
+    void MoveStatePostAnime()
+    {
+        if (moveType == MoveType.WALK)
+        {
+            // walk는 이동 후 동작이 없음
+            moveState = MoveState.INPUT;
+
+            // 이동 후 이벤트 처리
+            blockManager.PostMoveEvent(BlockManager.Obj.PLAYER, walkStartPos, walkEndPos);
         }
     }
 

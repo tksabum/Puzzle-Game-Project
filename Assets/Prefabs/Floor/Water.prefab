@@ -57,6 +57,7 @@ MonoBehaviour:
   rightExitable: 1
   upExitable: 1
   downExitable: 1
+  floorType: 1
 --- !u!212 &-1684923710603648327
 SpriteRenderer:
   m_ObjectHideFlags: 0

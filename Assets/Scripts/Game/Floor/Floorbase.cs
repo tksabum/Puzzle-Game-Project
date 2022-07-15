@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum FloorType
+{
+    PLANE,
+    WATER,
+    BUTTON,
+    TRAP,
+    PORTAL
+}
+
 public abstract class Floorbase : MonoBehaviour
 {
     [Header("- EnterObject -")]
@@ -23,6 +32,9 @@ public abstract class Floorbase : MonoBehaviour
     public bool rightExitable;
     public bool upExitable;
     public bool downExitable;
+
+    [Header(" - ETC -")]
+    public FloorType floorType;
 
     protected Vector2Int idx;
     protected bool power;
