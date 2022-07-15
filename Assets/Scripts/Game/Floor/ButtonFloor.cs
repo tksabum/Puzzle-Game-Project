@@ -13,8 +13,10 @@ public class ButtonFloor : Floorbase
     bool isPressed = false;
 
 
-    void Awake()
+    private new void Awake()
     {
+        base.Awake();
+
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 

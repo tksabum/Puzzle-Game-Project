@@ -36,12 +36,47 @@ public abstract class Floorbase : MonoBehaviour
     [Header(" - ETC -")]
     public FloorType floorType;
 
+    protected bool occurInPreEvent;
+    protected bool occurInEvent;
+    protected bool occurInPostEvent;
+
     protected Vector2Int idx;
     protected bool power;
 
-    private void Awake()
+    protected void Awake()
     {
         power = false;
+
+        if (floorType == FloorType.PLANE)
+        {
+            occurInPreEvent = false;
+            occurInEvent = false;
+            occurInPostEvent = true;
+        }
+        else if (floorType == FloorType.WATER)
+        {
+            occurInPreEvent = false;
+            occurInEvent = false;
+            occurInPostEvent = true;
+        }
+        else if (floorType == FloorType.BUTTON)
+        {
+            occurInPreEvent = false;
+            occurInEvent = false;
+            occurInPostEvent = true;
+        }
+        else if (floorType == FloorType.TRAP)
+        {
+            occurInPreEvent = false;
+            occurInEvent = true;
+            occurInPostEvent = false;
+        }
+        else if (floorType == FloorType.PORTAL)
+        {
+            occurInPreEvent = false;
+            occurInEvent = false;
+            occurInPostEvent = true;
+        }
     }
 
     // Update is called once per frame
@@ -53,6 +88,21 @@ public abstract class Floorbase : MonoBehaviour
     public void SetIdx(Vector2Int _idx)
     {
         idx = _idx;
+    }
+
+    public bool GetOccurInPreEvent()
+    {
+        return occurInPreEvent;
+    }
+
+    public bool GetOccurInEvent()
+    {
+        return occurInEvent;
+    }
+
+    public bool GetOccurInPostEvent()
+    {
+        return occurInPostEvent;
     }
 
     // 들어갈 수 있는지 판단

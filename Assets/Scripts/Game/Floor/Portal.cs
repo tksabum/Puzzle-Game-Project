@@ -15,8 +15,10 @@ public class Portal : Floorbase
 
     SpriteRenderer spriteRenderer;
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
+
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         power = powerDefault;

@@ -167,13 +167,37 @@ public class BlockManager : MonoBehaviour
                 floorList[pushidx.x][pushidx.y].OnObjectEnter(gameManager, this, nextitem.obj);
             }
         }
+
+        // floor
+        Floorbase nowfloor = floorList[nowidx.x][nowidx.y];
+        Floorbase nextfloor = floorList[nextidx.x][nextidx.y];
+
+        if (nowfloor.GetOccurInPreEvent())
+        {
+            nowfloor.OnObjectExit(gameManager, this, obj);
+        }
+
+        if (nextfloor.GetOccurInPreEvent())
+        {
+            nextfloor.OnObjectEnter(gameManager, this, obj);
+        }
     }
 
     public void MoveEvent(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
     {
+        // floor
+        Floorbase nowfloor = floorList[nowidx.x][nowidx.y];
+        Floorbase nextfloor = floorList[nextidx.x][nextidx.y];
 
+        if (nowfloor.GetOccurInEvent())
+        {
+            nowfloor.OnObjectExit(gameManager, this, obj);
+        }
 
-
+        if (nextfloor.GetOccurInEvent())
+        {
+            nextfloor.OnObjectEnter(gameManager, this, obj);
+        }
     }
 
     public void PostMoveEvent(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
@@ -194,15 +218,15 @@ public class BlockManager : MonoBehaviour
         Floorbase nowfloor = floorList[nowidx.x][nowidx.y];
         Floorbase nextfloor = floorList[nextidx.x][nextidx.y];
 
-        if (MyFunctions.MyFunctions.SameAtLeastOne(nowfloor.floorType, FloorType.PLANE, FloorType.WATER, FloorType.BUTTON, FloorType.TRAP, FloorType.PORTAL))
+        if (nowfloor.GetOccurInPostEvent())
         {
-            // floortype에 따라서 enter, exit 이벤트 추가필요
+            nowfloor.OnObjectExit(gameManager, this, obj);
         }
 
-
-
-        floorList[nowidx.x][nowidx.y].OnObjectExit(gameManager, this, obj);
-        floorList[nextidx.x][nextidx.y].OnObjectEnter(gameManager, this, obj);
+        if (nextfloor.GetOccurInPostEvent())
+        {
+            nextfloor.OnObjectEnter(gameManager, this, obj);
+        }
     }
 
     public bool ItemUsable(Obj obj, Vector2Int playerPos, Direction direction)

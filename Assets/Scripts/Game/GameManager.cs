@@ -88,8 +88,6 @@ public class GameManager : MonoBehaviour
         Init();
 
         blockManager.SetBlock(mapData);
-
-        //StartCoroutine(CoroutineMove());
     }
 
     // Update is called once per frame
@@ -348,101 +346,6 @@ public class GameManager : MonoBehaviour
 
             // 이동 후 이벤트 처리
             blockManager.PostMoveEvent(BlockManager.Obj.PLAYER, walkStartPos, walkEndPos);
-        }
-    }
-
-    IEnumerator CoroutineMove()
-    {
-        playerWalk = false;
-
-        while (true)
-        {
-            
-            if (Time.timeScale == 0f)
-            {
-                yield return null;
-            }
-
-            if (!playerWalk)
-            {
-                Vector2Int moveDir = Vector2Int.zero;
-
-                if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.RIGHT]))
-                {
-                    moveDir = Vector2Int.right;
-                    playerDirection = BlockManager.Direction.RIGHT;
-                }
-                else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.LEFT]))
-                {
-                    moveDir = Vector2Int.left;
-                    playerDirection = BlockManager.Direction.LEFT;
-                }
-                else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.UP]))
-                {
-                    moveDir = Vector2Int.up;
-                    playerDirection = BlockManager.Direction.UP;
-                }
-                else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.DOWN]))
-                {
-                    moveDir = Vector2Int.down;
-                    playerDirection = BlockManager.Direction.DOWN;
-                }
-                else
-                {
-                    playerAnimator.SetBool("walking", playerWalk);
-                    yield return null;
-                    continue;
-                }
-
-                playerAnimator.SetFloat("DirX", (float)moveDir.x);
-                playerAnimator.SetFloat("DirY", (float)moveDir.y);
-
-
-                Vector2Int nowidx = playeridx;
-                Vector2Int nextidx = playeridx + moveDir;
-
-                // 갈 수 있는 위치인지 체크
-                if (blockManager.Movable(BlockManager.Obj.PLAYER, nowidx, nextidx))
-                {
-                    // 갈 수 있다면 이동
-                    playeridx = nextidx;
-                    walkStartPos = nowidx;
-                    walkEndPos = nextidx;
-
-                    playerWalk = true;
-                    playerAnimator.SetBool("walking", playerWalk);
-
-                    // 이동 전 처리
-                    blockManager.PreMoveEvent(BlockManager.Obj.PLAYER, nowidx, nextidx);
-                }
-            }
-            else
-            {
-                Vector3 nextPos = player.transform.position + (playerSpeed * (Vector3)(Vector2)(walkEndPos - walkStartPos) * Time.deltaTime);
-                
-                float nextPosXY = nextPos.y;
-                float playPosXY = player.transform.position.y;
-                float endPosXY = walkEndPos.y;
-                if (playerDirection == BlockManager.Direction.LEFT || playerDirection == BlockManager.Direction.RIGHT)
-                {
-                    nextPosXY = nextPos.x;
-                    playPosXY = player.transform.position.x;
-                    endPosXY = walkEndPos.x;
-                }
-
-                if (((endPosXY - playPosXY) > 0 && nextPosXY < endPosXY) || ((endPosXY - playPosXY) < 0 && nextPosXY > endPosXY))
-                {
-                    player.transform.position = nextPos;
-                }
-                else
-                {
-                    player.transform.position = (Vector2)walkEndPos;
-                    playerWalk = false;
-                    blockManager.PostMoveEvent(BlockManager.Obj.PLAYER, walkStartPos, walkEndPos);
-                }
-            }
-
-            yield return null;
         }
     }
 

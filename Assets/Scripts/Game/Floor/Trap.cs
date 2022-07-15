@@ -15,8 +15,10 @@ public class Trap : Floorbase
 
     SpriteRenderer spriteRenderer;
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
+
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         power = powerDefault;
