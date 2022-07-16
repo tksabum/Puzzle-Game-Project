@@ -3,24 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[System.Serializable]
-public class PowerList
-{
-    [SerializeField]
-    List<Vector2Int> consumer;
-
-    public List<Vector2Int> GetList()
-    {
-        return consumer;
-    }
-}
-
-[System.Serializable]
-public class PowerDic : SerializableDictionary<Vector2Int, PowerList> { }
-
-[System.Serializable]
-public class PortalDic : SerializableDictionary<Vector2Int, Vector2Int> { }
-
 public class BlockManager : MonoBehaviour
 {
     List<List<Floorbase>> floorList;
@@ -51,7 +33,7 @@ public class BlockManager : MonoBehaviour
         return mapData.itemData[vector.x][vector.y];
     }
 
-
+    // 이동 가능 여부 판단
     public bool Movable(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
     {
         if (nextidx.x < 0 || mapwidth <= nextidx.x || nextidx.y < 0 || mapheight <= nextidx.y)
@@ -83,7 +65,6 @@ public class BlockManager : MonoBehaviour
             enterDir = Direction.UP;
             exitDir = Direction.DOWN;
         }
-
 
         bool enterableFloor = floorList[nextidx.x][nextidx.y].Enterable(obj, enterDir);
         bool exitableFloor = floorList[nowidx.x][nowidx.y].Exitable(obj, exitDir);
@@ -150,7 +131,8 @@ public class BlockManager : MonoBehaviour
         }
     }
     
-    // 이동시 이벤트는 Exit -> Enter 순서로 처리한다.
+    // ####### 이동시 이벤트는 Exit -> Enter 순서로 처리한다.
+    // 이동 전 발생하는 이벤트
     public void PreMoveEvent(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
     {
         // item
@@ -183,6 +165,7 @@ public class BlockManager : MonoBehaviour
         }
     }
 
+    // 이동중 이전 블록보다 다음 블록에 더 가까워진 순간 발생하는 이벤트
     public void MoveEvent(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
     {
         // floor
@@ -200,6 +183,7 @@ public class BlockManager : MonoBehaviour
         }
     }
 
+    // 다음 블록으로 완전히 이동 후 발생하는 이벤트
     public void PostMoveEvent(Obj obj, Vector2Int nowidx, Vector2Int nextidx)
     {
         // item
@@ -229,6 +213,7 @@ public class BlockManager : MonoBehaviour
         }
     }
 
+    // 아이템 사용 가능 여부 판단
     public bool ItemUsable(Obj obj, Vector2Int playerPos, Direction direction)
     {
         Vector2Int vecDir;
@@ -255,6 +240,8 @@ public class BlockManager : MonoBehaviour
 
         return false;
     }
+    
+    // 각각의 아이템 사용 처리
     public void ItemUseEvent(Obj obj, Vector2Int playerPos, Direction direction)
     {
         Vector2Int vecDir;
@@ -284,6 +271,7 @@ public class BlockManager : MonoBehaviour
         }
     }
 
+    // 누른 버튼의 좌표를 키값으로 powerDic에서 얻은 좌표의 floor의 전원을 토글함
     public void PowerToggle(Vector2Int buttonIdx)
     {
         List<Vector2Int> consumerList = powerDic[buttonIdx];
@@ -294,11 +282,13 @@ public class BlockManager : MonoBehaviour
         }
     }
 
+    // 포탈의 출구 좌표를 리턴
     public Vector2Int GetPortalExit(Vector2Int entrance)
     {
         return portalDic[entrance];
     }
 
+    // 블록(게임 오브젝트)를 생성하고 게임 진행에 필요한 powerDic, portalDic을 생성
     public void SetBlock(MapData data)
     {
         mapData = data;
@@ -396,6 +386,7 @@ public class BlockManager : MonoBehaviour
         floorList[playeridx.x][playeridx.y].OnObjectEnter(gameManager, this, Obj.PLAYER);
     }
 
+    // 동일한 맵으로 초기화
     public void ResetBlock()
     {
         RemoveBlock();
@@ -403,6 +394,7 @@ public class BlockManager : MonoBehaviour
         SetBlock();
     }
 
+    // 모든 블록(게임 오브젝트) 제거
     public void RemoveBlock()
     {
         for (int i = 0; i < mapwidth; i++)

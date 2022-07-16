@@ -132,6 +132,7 @@ public class GameManager : MonoBehaviour
         uiManager.Reset(life, mapName, preparedItem);
     }
 
+    // 아이템 사용
     void UseItem()
     {
         if (!playerWalk && preparedItem != BlockManager.Obj.EMPTY && Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.USE_ITEM]))
@@ -148,6 +149,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 매 프레임 마다 실행되는 카메라 관련 처리
     void UpdateCamera()
     {
         // 카메라 줌
@@ -196,10 +198,7 @@ public class GameManager : MonoBehaviour
         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, targetPos, 0.1f);
     }
 
-
-    // 이동 전, 이동 후 애니메이션을 추가할 때는
-    // INPUT에서 입력 받은 후, 주변 block으로 어떤 이동방식을 사용하는지
-    // 기본이동, 달리기, 점프 등으로 구분해 저장해 두었다가 그에 맞는 애니메이션을 재생하면 될 듯
+    // 매 프레임 마다 실행되는 이동 관련 처리
     void Move()
     {
         // 입력
@@ -227,6 +226,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 입력
     void MoveStateInput()
     {
         Vector2Int moveDir = Vector2Int.zero;
@@ -278,6 +278,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 이동 전 애니메이션
     void MoveStatePreAnime()
     {
         if (moveType == MoveType.WALK)
@@ -290,6 +291,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 이동 중 애니메이션
     void MoveStateAnime()
     {
         if (moveType == MoveType.WALK)
@@ -337,6 +339,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 이동 후 애니메이션
     void MoveStatePostAnime()
     {
         if (moveType == MoveType.WALK)
@@ -349,6 +352,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 아이템 획득
     public void GetItem(BlockManager.Obj obj)
     {
         if (obj == BlockManager.Obj.HAMMER)
@@ -367,16 +371,19 @@ public class GameManager : MonoBehaviour
         uiManager.SetItem(preparedItem);
     }
 
+    // Goal 아이템 획득
     public void GetGoal()
     {
         GameClear();
     }
 
+    // 공격 받음
     public void AttackedPlayer()
     {
         addLife(-1);
     }
 
+    // 포탈의 출구로 이동
     public void MovePortal(Vector2Int portalidx)
     {
         Vector2Int nextPos = blockManager.GetPortalExit(playeridx);
@@ -384,6 +391,7 @@ public class GameManager : MonoBehaviour
         player.transform.position = (Vector2)nextPos;
     }
 
+    // 라이프 조정 (value값 음수 가능)
     void addLife(int value)
     {
         life = Mathf.Clamp(life + value, 0, maxlife);
@@ -394,6 +402,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 맵 데이터 로드
     public MapData Load()
     {
         if (File.Exists(dataPath))
@@ -411,6 +420,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 일시정지
     public void ButtonPause()
     {
         if (Time.timeScale == 0f)
@@ -425,12 +435,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 메뉴로 돌아가기
     public void ButtonBack()
     {
         DataBus.Instance.WriteStartState(State.MENU);
         SceneManager.LoadScene("MainScene");
     }
 
+    // 게임 오버
     void GameOver()
     {
         Time.timeScale = 0f;
@@ -438,6 +450,7 @@ public class GameManager : MonoBehaviour
         uiManager.SetGameOver(true);
     }
 
+    // 게임 클리어
     void GameClear()
     {
         Time.timeScale = 0f;
@@ -474,9 +487,6 @@ public class GameManager : MonoBehaviour
             int saveStoryNum = PlayerPrefs.GetInt("clearInfo_storyNum", 0);
             int saveMapNum = PlayerPrefs.GetInt("clearInfo_mapNum", 10);
 
-            //Debug.Log("now: " + nowStoryNum + ", " + nowMapNum);
-            //Debug.Log("save: " + saveStoryNum + ", " + saveMapNum);
-
             if ((saveStoryNum < nowStoryNum) || (saveStoryNum == nowStoryNum && saveMapNum < nowMapNum))
             {
                 PlayerPrefs.SetInt("clearInfo_storyNum", nowStoryNum);
@@ -485,19 +495,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // timeScale 초기화
     public void ButtonResetTimeScale()
     {
         Time.timeScale = 1f;
     }
 
-    public void ResetGame()
+    // 게임 초기화
+    public void ButtonResetGame()
     {
         Init();
 
         blockManager.ResetBlock();
     }
 
-    public void NextGame()
+    // 다음맵으로 게임 초기화
+    // NextButton은 10번 맵이 아닌 스토리맵에서만 Active상태가 됨
+    public void ButtonNextGame()
     {
         string str1 = "";
         string str2 = "";

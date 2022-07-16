@@ -6,6 +6,24 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 [System.Serializable]
+public class PowerList
+{
+    [SerializeField]
+    List<Vector2Int> consumer;
+
+    public List<Vector2Int> GetList()
+    {
+        return consumer;
+    }
+}
+
+[System.Serializable]
+public class PowerDic : SerializableDictionary<Vector2Int, PowerList> { }
+
+[System.Serializable]
+public class PortalDic : SerializableDictionary<Vector2Int, Vector2Int> { }
+
+[System.Serializable]
 public class PairInt
 {
     public int x;
