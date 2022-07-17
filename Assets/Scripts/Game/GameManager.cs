@@ -67,9 +67,13 @@ public class GameManager : MonoBehaviour
     MoveState moveState;
     MoveType moveType;
 
+    float tickTimer;
+
     // Start is called before the first frame update
     void Start()
     {
+        tickTimer = Time.time;
+
         mapName = DataBus.Instance.ReadMapName();
 
         if (mapName == null)
@@ -103,6 +107,20 @@ public class GameManager : MonoBehaviour
 
         // 카메라
         UpdateCamera();
+
+
+        // Tick
+        if (0.125f < tickTimer && tickTimer < 0.25f)
+        {
+            blockManager.Tick();
+        }
+        else if (tickTimer >= 0.25f)
+        {
+            for (int i = 0; i < tickTimer / 0.125f; i++)
+            {
+                blockManager.Tick();
+            }
+        }
 
         // 이동 처리
         Move();

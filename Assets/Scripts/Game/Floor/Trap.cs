@@ -13,6 +13,11 @@ public class Trap : Floorbase
     public bool powerType;
     public bool powerDefault;
 
+    bool isWorkOnTick;
+    int firstDelay; // 첫 toggle 시작 전 지연
+    int oddDelay; // 홀수번째 toggle 후 지연시간
+    int evenDelay; // 짝수번째 toggle 후 지연시간
+
     SpriteRenderer spriteRenderer;
 
     private new void Awake()
@@ -49,6 +54,26 @@ public class Trap : Floorbase
     {
         power = !power;
         RefreshSprite();
+    }
+
+    public bool ToggleOnCurrentTick(int tickCount)
+    {
+        if (!isWorkOnTick)
+        {
+            return false;
+        }
+
+        if (tickCount >= firstDelay)
+        {
+            int currentCount = (tickCount - firstDelay) % (oddDelay + evenDelay);
+
+            if (currentCount == 0 || currentCount == oddDelay)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void RefreshSprite()

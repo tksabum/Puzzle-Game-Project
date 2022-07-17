@@ -23,6 +23,8 @@ public class BlockManager : MonoBehaviour
 
     MapData mapData;
 
+    int tickCount;
+
     string GetFloorString(Vector3Int vector)
     {
         return mapData.floorData[vector.x][vector.y];
@@ -31,6 +33,22 @@ public class BlockManager : MonoBehaviour
     string GetItemString(Vector3Int vector)
     {
         return mapData.itemData[vector.x][vector.y];
+    }
+
+    // 0.125초 마다 발생
+    public void Tick()
+    {
+        // 현재 Tick은 tickCounter번째 Tick임
+        tickCount++;
+
+        // trapList를 순회하며 리스트 내의 모든 Trap을 확인하여 (Trap은 3개의 int변수 a, b, c를 가짐, a-처음 작동까지의 딜레이, b-홀수번째 toggle 후 대기 시간, c-짝수번째 toggle 후 대기 시간)
+        // 이번 Tick에 Toggle 되어야 하는 Trap을 Toggle함
+        // 또한 Toggle 되어 활성화 될 경우, 그 위에 플레이어가 있다면 데미지를 입혀야 함
+
+
+        // Trap에 ToggleOnCurrentTick() 함수 만들어둠
+        // TrapList 만들어지면 위의 함수 불러서 확인 후 toggle하면 될 듯
+
     }
 
     // 이동 가능 여부 판단
@@ -384,6 +402,8 @@ public class BlockManager : MonoBehaviour
         // 플레이어 위치의 floor를 작동시키기 위해 OnObjectEnter 실행
         Vector2Int playeridx = gameManager.GetPlayerIdx();
         floorList[playeridx.x][playeridx.y].OnObjectEnter(gameManager, this, Obj.PLAYER);
+
+        tickCount = 0;
     }
 
     // 동일한 맵으로 초기화
