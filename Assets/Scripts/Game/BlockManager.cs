@@ -14,6 +14,7 @@ public class BlockManager : MonoBehaviour
 
     Dictionary<Vector2Int, List<Vector2Int>> powerDic;
     Dictionary<Vector2Int, Vector2Int> portalDic;
+    List<Vector2Int> tickTrapList;
 
     public enum Obj { EMPTY, PLAYER, WOODENBOX, GOAL, HAMMER, LIFE };
     public enum Direction { LEFT, RIGHT, UP, DOWN };
@@ -40,14 +41,19 @@ public class BlockManager : MonoBehaviour
     {
         // 현재 Tick은 tickCounter번째 Tick임
         tickCount++;
+        
 
-        // trapList를 순회하며 리스트 내의 모든 Trap을 확인하여 (Trap은 3개의 int변수 a, b, c를 가짐, a-처음 작동까지의 딜레이, b-홀수번째 toggle 후 대기 시간, c-짝수번째 toggle 후 대기 시간)
-        // 이번 Tick에 Toggle 되어야 하는 Trap을 Toggle함
-        // 또한 Toggle 되어 활성화 될 경우, 그 위에 플레이어가 있다면 데미지를 입혀야 함
+        // Trap 작동
+        for(int i = 0; i < tickTrapList.Count; i++)
+        {
+            Vector2Int ticktrapidx = tickTrapList[i];
+            Trap ticktrap = (Trap)floorList[ticktrapidx.x][ticktrapidx.y];
 
-
-        // Trap에 ToggleOnCurrentTick() 함수 만들어둠
-        // TrapList 만들어지면 위의 함수 불러서 확인 후 toggle하면 될 듯
+            if (ticktrap.ToggleOnCurrentTick(tickCount))
+            {
+                ticktrap.PowerToggle(gameManager);
+            }
+        }
 
     }
 
@@ -296,7 +302,7 @@ public class BlockManager : MonoBehaviour
         for (int i = 0; i < consumerList.Count; i++)
         {
             Vector2Int consumerIdx = consumerList[i];
-            floorList[consumerIdx.x][consumerIdx.y].PowerToggle();
+            floorList[consumerIdx.x][consumerIdx.y].PowerToggle(gameManager);
         }
     }
 
@@ -385,6 +391,23 @@ public class BlockManager : MonoBehaviour
                 portalDic.Add(new Vector2Int(key.x, key.y), new Vector2Int(value.x, value.y));
             }
         }
+
+        tickTrapList = new List<Vector2Int>();
+        if (mapData.trapData != null)
+        {
+            foreach(KeyValuePair<PairInt, ThreeInt> keyValuePair in mapData.trapData)
+            {
+                Vector2Int key = Vector2Int.zero;
+                key.x = keyValuePair.Key.x;
+                key.y = keyValuePair.Key.y;
+
+                ThreeInt value = keyValuePair.Value;
+
+                tickTrapList.Add(key);
+                ((Trap)floorList[key.x][key.y]).SetWorkOnTick(value);
+            }
+        }
+
 
         // 아이템이 올려져 있는 버튼과 같은 floor들을 작동시키기 위해 OnObjectEnter 실행
         for (int i = 0; i < mapwidth; i++)

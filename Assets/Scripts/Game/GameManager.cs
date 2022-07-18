@@ -395,10 +395,19 @@ public class GameManager : MonoBehaviour
         GameClear();
     }
 
-    // 공격 받음
+    // 플레이어 공격 받음
     public void AttackedPlayer()
     {
         addLife(-1);
+    }
+
+    // 특정 위치 공격 받음
+    public void AttackedPos(Vector2Int attackedidx)
+    {
+        if (playeridx == attackedidx)
+        {
+            AttackedPlayer();
+        }
     }
 
     // 포탈의 출구로 이동

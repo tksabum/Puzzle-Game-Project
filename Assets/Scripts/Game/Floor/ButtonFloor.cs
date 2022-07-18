@@ -18,6 +18,14 @@ public class ButtonFloor : Floorbase
         base.Awake();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        Init();
+    }
+
+    void Init()
+    {
+        isPressed = false;
+        RefreshSprite();
     }
 
     // Update is called once per frame
@@ -46,7 +54,7 @@ public class ButtonFloor : Floorbase
         }
     }
 
-    public override void PowerToggle()
+    public override void PowerToggle(GameManager gameManager)
     {
         
     }
@@ -65,7 +73,6 @@ public class ButtonFloor : Floorbase
 
     private void OnDisable()
     {
-        isPressed = false;
-        RefreshSprite();
+        Init();
     }
 }

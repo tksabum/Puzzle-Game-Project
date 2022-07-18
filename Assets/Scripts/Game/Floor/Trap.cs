@@ -26,15 +26,29 @@ public class Trap : Floorbase
 
         spriteRenderer = GetComponent<SpriteRenderer>();
 
+        Init();
+    }
+
+    void Init()
+    {
         power = powerDefault;
+        isWorkOnTick = false;
 
         RefreshSprite();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetWorkOnTick(ThreeInt threeInt)
     {
-        
+        SetWorkOnTick(threeInt.x, threeInt.y, threeInt.z);
+    }
+
+    public void SetWorkOnTick(int firstdelay, int odddelay, int evendelay)
+    {
+        isWorkOnTick = true;
+
+        firstDelay = firstdelay;
+        oddDelay = odddelay;
+        evenDelay = evendelay;
     }
 
     public override void OnObjectEnter(GameManager gameManager, BlockManager blockManager, BlockManager.Obj obj)
@@ -50,10 +64,15 @@ public class Trap : Floorbase
         
     }
 
-    public override void PowerToggle()
+    public override void PowerToggle(GameManager gameManager)
     {
         power = !power;
         RefreshSprite();
+
+        if (!(power ^ powerType))
+        {
+            gameManager.AttackedPos(idx);
+        }
     }
 
     public bool ToggleOnCurrentTick(int tickCount)
@@ -90,8 +109,6 @@ public class Trap : Floorbase
 
     private void OnDisable()
     {
-        power = powerDefault;
-
-        RefreshSprite();
+        Init();
     }
 }

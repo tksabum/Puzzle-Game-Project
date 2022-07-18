@@ -45,7 +45,7 @@ public abstract class Floorbase : MonoBehaviour
 
     protected void Awake()
     {
-        power = false;
+        //power = false;
 
         if (floorType == FloorType.PLANE)
         {
@@ -164,5 +164,5 @@ public abstract class Floorbase : MonoBehaviour
     // 오브젝트가 나가면 실행
     public abstract void OnObjectExit(GameManager gameManager, BlockManager blockManager, BlockManager.Obj obj);
 
-    public abstract void PowerToggle();
+    public abstract void PowerToggle(GameManager gameManager);
 }

@@ -15,7 +15,7 @@ public class Water : Floorbase
         
     }
 
-    public override void PowerToggle()
+    public override void PowerToggle(GameManager gameManager)
     {
         
     }

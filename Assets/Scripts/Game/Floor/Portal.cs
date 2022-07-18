@@ -21,8 +21,12 @@ public class Portal : Floorbase
 
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        power = powerDefault;
+        Init();
+    }
 
+    void Init()
+    {
+        power = powerDefault;
         RefreshSprite();
     }
 
@@ -46,7 +50,7 @@ public class Portal : Floorbase
         
     }
 
-    public override void PowerToggle()
+    public override void PowerToggle(GameManager gameManager)
     {
         power = !power;
         RefreshSprite();
@@ -66,8 +70,6 @@ public class Portal : Floorbase
 
     private void OnDisable()
     {
-        power = powerDefault;
-
-        RefreshSprite();
+        Init();
     }
 }
