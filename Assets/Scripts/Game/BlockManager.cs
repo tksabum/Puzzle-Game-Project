@@ -39,10 +39,6 @@ public class BlockManager : MonoBehaviour
     // 0.125초 마다 발생
     public void Tick()
     {
-        // 현재 Tick은 tickCounter번째 Tick임
-        tickCount++;
-        
-
         // Trap 작동
         for(int i = 0; i < tickTrapList.Count; i++)
         {
@@ -55,6 +51,7 @@ public class BlockManager : MonoBehaviour
             }
         }
 
+        tickCount++;
     }
 
     // 이동 가능 여부 판단

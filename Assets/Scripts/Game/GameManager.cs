@@ -67,13 +67,12 @@ public class GameManager : MonoBehaviour
     MoveState moveState;
     MoveType moveType;
 
+    float lastTickTimer;
     float tickTimer;
 
     // Start is called before the first frame update
     void Start()
     {
-        tickTimer = Time.time;
-
         mapName = DataBus.Instance.ReadMapName();
 
         if (mapName == null)
@@ -92,6 +91,8 @@ public class GameManager : MonoBehaviour
         Init();
 
         blockManager.SetBlock(mapData);
+
+        lastTickTimer = Time.time;
     }
 
     // Update is called once per frame
@@ -108,17 +109,20 @@ public class GameManager : MonoBehaviour
         // Ä«¸Þ¶ó
         UpdateCamera();
 
-
+        tickTimer = Time.time - lastTickTimer;
+        
         // Tick
         if (0.125f < tickTimer && tickTimer < 0.25f)
         {
             blockManager.Tick();
+            lastTickTimer = Time.time;
         }
         else if (tickTimer >= 0.25f)
         {
             for (int i = 0; i < tickTimer / 0.125f; i++)
             {
                 blockManager.Tick();
+                lastTickTimer = Time.time;
             }
         }
 
