@@ -25,15 +25,22 @@ public class MainManager : MonoBehaviour
     public AudioSource bgmSource;
     public List<AudioClip> bgmClips;
 
-    public List<AudioSource> audioSources;
-    public List<AudioClip> audioClips;
+    public GameObject audioSource;
+    public AudioClip audioClipMenuButton;
     
     const int EMPTY = -1;
 
     int state = EMPTY;
 
+    Queue<AudioSource> waitingAudioSource;
+
     // 저장 필요
     Vector2Int clearInfo;
+
+    private void Awake()
+    {
+        waitingAudioSource = new Queue<AudioSource>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -125,15 +132,55 @@ public class MainManager : MonoBehaviour
         if (state == EMPTY)
         {
             bgmSource.clip = bgmClips[nextstate];
+            SetBGMVolume(bgmSource);
             bgmSource.Play();
         }
         else if (bgmClips[state] != bgmClips[nextstate])
         {
             bgmSource.Stop();
             bgmSource.clip = bgmClips[nextstate];
+            SetBGMVolume(bgmSource);
             bgmSource.Play();
         }
         
         state = nextstate;
+    }
+
+    public void PlayMenuButtonAudio()
+    {
+        PlayAudio(audioClipMenuButton);
+    }
+
+    void PlayAudio(AudioClip audio)
+    {
+        if (waitingAudioSource.Count == 0)
+        {
+            AudioSource source = Instantiate(audioSource, Vector3.zero, Quaternion.identity, transform).GetComponent<AudioSource>();
+            waitingAudioSource.Enqueue(source);
+        }
+
+        AudioSource audiosource = waitingAudioSource.Dequeue();
+        audiosource.clip = audio;
+        SetUIVolume(audiosource);
+        audiosource.Play();
+
+        StartCoroutine(WaitForSound(audiosource));
+    }
+
+    IEnumerator WaitForSound(AudioSource audiosource)
+    {
+        yield return new WaitUntil(() => audiosource.isPlaying == false);
+
+        waitingAudioSource.Enqueue(audiosource);
+    }
+
+    void SetBGMVolume(AudioSource audiosource)
+    {
+        audiosource.volume = 0.1f * PlayerPrefs.GetInt("SoundSettingBGM");
+    }
+
+    void SetUIVolume(AudioSource audiosource)
+    {
+        audiosource.volume = 0.1f * PlayerPrefs.GetInt("SoundSettingUI");
     }
 }
