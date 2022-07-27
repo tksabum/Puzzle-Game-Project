@@ -176,11 +176,11 @@ public class MainManager : MonoBehaviour
 
     void SetBGMVolume(AudioSource audiosource)
     {
-        audiosource.volume = 0.1f * PlayerPrefs.GetInt("SoundSettingBGM");
+        audiosource.volume = 0.1f * PlayerPrefs.GetInt("SoundSettingBGM", 5);
     }
 
     void SetUIVolume(AudioSource audiosource)
     {
-        audiosource.volume = 0.1f * PlayerPrefs.GetInt("SoundSettingUI");
+        audiosource.volume = 0.1f * PlayerPrefs.GetInt("SoundSettingUI", 5);
     }
 }
