@@ -8,7 +8,8 @@ public enum FloorType
     WATER,
     BUTTON,
     TRAP,
-    PORTAL
+    PORTAL,
+    GENERATOR
 }
 
 public abstract class Floorbase : MonoBehaviour

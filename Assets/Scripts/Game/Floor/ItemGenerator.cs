@@ -10,38 +10,68 @@ public class ItemGenerator : Floorbase
         TIME
     }
 
-
-    public BlockManager.Obj product;
-    public GeneratorType generatorType;
-    public int cycle;
-
+    [Header("- Item Generator -")]
     public bool powerDefault;
+    public int generationCycle;
 
+    BlockManager.Obj product;
+    GeneratorType generatorType;
 
-    // Start is called before the first frame update
-    void Start()
+    bool isObjectEntered;
+
+    private new void Awake()
     {
-        
+        base.Awake();
+
+        isObjectEntered = false;
+        power = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    // ItemGenerator에서 생성되는 아이템 설정
+    public void SetProduct(BlockManager.Obj obj)
     {
-        
+        product = obj;
     }
 
+    // 아이템 생성방식 설정
+    public void SetGeneratorType(GeneratorType type)
+    {
+        generatorType = type;
+    }
+
+    // 게임시작시 플레이어, 아이템이 위에 있다면 실행되야 함
+    // 플레이어 이동시 PreMoveEvent에서 실행되야 함
     public override void OnObjectEnter(GameManager gameManager, BlockManager blockManager, BlockManager.Obj obj)
     {
-        throw new System.NotImplementedException();
+        isObjectEntered = true;
     }
 
     public override void OnObjectExit(GameManager gameManager, BlockManager blockManager, BlockManager.Obj obj)
     {
-        throw new System.NotImplementedException();
+        isObjectEntered = false;
     }
 
     public override void PowerToggle(GameManager gameManager)
     {
-        throw new System.NotImplementedException();
+        power = !power;
+        
+        // 전원이 켜질 때 위에 놓여진 아이템이 없는 경우
+        if (power && !isObjectEntered)
+        {
+            GenerateItem(gameManager.blockManager);
+        }
+    }
+
+    public void GenerateItem(BlockManager blockManager)
+    {
+
+    }
+
+    public void Tick(BlockManager blockManager, int tickCount)
+    {
+        if (tickCount % generationCycle == 0 && !isObjectEntered)
+        {
+            GenerateItem(blockManager);
+        }
     }
 }
