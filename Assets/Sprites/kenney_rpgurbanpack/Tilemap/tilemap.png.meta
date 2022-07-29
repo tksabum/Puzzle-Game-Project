@@ -1491,7 +1491,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -1548,6 +1548,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -12025,8 +12037,8 @@ TextureImporter:
       tilemap_461: 2434556851747060362
       tilemap_153: -58161963810847867
       tilemap_260: 3593867221280137955
-      tilemap_370: -4802730557585814622
       tilemap_436: 8400183085412746229
+      tilemap_370: -4802730557585814622
       tilemap_236: -5996447933680060755
       tilemap_277: 189723590250953223
       tilemap_228: 7374747057329743388
@@ -12068,12 +12080,12 @@ TextureImporter:
       tilemap_304: 1260568985933166213
       tilemap_346: 7817588966904232785
       tilemap_0: 8490642196906846815
+      tilemap_391: 3561017015767911030
       tilemap_109: 8913244904277133699
       tilemap_203: -2229393840641828426
       tilemap_344: -396258942483662451
       tilemap_321: -1408177447370720925
       tilemap_27: -4683339530408089196
-      tilemap_391: 3561017015767911030
       tilemap_99: -7673242495530757358
       tilemap_112: -529817384411311156
       tilemap_477: -7008962737526222651
@@ -12096,11 +12108,11 @@ TextureImporter:
       tilemap_65: -8129655836590701982
       tilemap_432: 7691109639165059644
       tilemap_117: -3393311792599043978
-      tilemap_61: -3576083122866698956
-      tilemap_106: 6295474923448991246
       tilemap_348: -8518187685681327068
+      tilemap_61: -3576083122866698956
       tilemap_34: 1522158807346708707
       tilemap_237: -3772832600173435698
+      tilemap_106: 6295474923448991246
       tilemap_116: -8887993299131670151
       tilemap_44: -251864790952300765
       tilemap_101: -4146658962222183008
@@ -12112,8 +12124,8 @@ TextureImporter:
       tilemap_335: -1062916585394694872
       tilemap_218: 8958448385723830662
       tilemap_138: -5565395274239018495
-      tilemap_73: 9478795197586167
       tilemap_220: 4434343234319022908
+      tilemap_73: 9478795197586167
       tilemap_84: 5424348670514132440
       tilemap_191: 8285817530972507404
       tilemap_60: -2994928844648702356

@@ -177,7 +177,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -234,6 +234,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -1297,9 +1309,9 @@ TextureImporter:
       Trap_4: 6840254211512974232
       Trap_18: -4211028236918958343
       Trap_19: 7014600545875090362
+      Trap_34: -4618010394198347881
       Trap_1: 3333967470306039257
       Trap_22: -3304222251572736292
-      Trap_34: -4618010394198347881
       Trap_45: -9041579064023345500
       Trap_35: -3367704275435237658
       Trap_31: -5204395479518682181
