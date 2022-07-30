@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public Animator playerAnimator;
     public float playerSpeed;
+    public Vector2 playerOffset;
 
     bool playerWalk;
     BlockManager.Direction playerDirection;
@@ -140,7 +141,7 @@ public class GameManager : MonoBehaviour
         moveType = MoveType.WALK;
 
         // 플레이어 초기화
-        player.transform.position = (Vector2)playeridx;
+        SetPlayerPosition(playeridx);
         playerDirection = BlockManager.Direction.DOWN;
         playerWalk = false;
 
@@ -198,7 +199,7 @@ public class GameManager : MonoBehaviour
         /* */
 
         // 카메라 이동
-        Vector3 targetPos = player.transform.position;
+        Vector3 targetPos = GetPlayerPosition();
         Vector3 centerPos = new Vector3(((float)mapData.mapWidth - 1f) / 2f, ((float)mapData.mapHeight - 1f) / 2f, 0);
         if (horizMin < horizMax)
         {
@@ -323,10 +324,10 @@ public class GameManager : MonoBehaviour
             playerAnimator.SetBool("walking", playerWalk);
 
             // 위치 이동
-            Vector3 nextPos = player.transform.position + (playerSpeed * (Vector3)(Vector2)(walkEndPos - walkStartPos) * Time.deltaTime);
+            Vector3 nextPos = (Vector3)GetPlayerPosition() + (playerSpeed * (Vector3)(Vector2)(walkEndPos - walkStartPos) * Time.deltaTime);
 
             float nextPosXY = nextPos.y;
-            float playPosXY = player.transform.position.y;
+            float playPosXY = GetPlayerPosition().y;
             float startPosXY = walkStartPos.y;
             float endPosXY = walkEndPos.y;
 
@@ -335,7 +336,7 @@ public class GameManager : MonoBehaviour
             if (playerDirection == BlockManager.Direction.LEFT || playerDirection == BlockManager.Direction.RIGHT)
             {
                 nextPosXY = nextPos.x;
-                playPosXY = player.transform.position.x;
+                playPosXY = GetPlayerPosition().x;
                 startPosXY = walkStartPos.x;
                 endPosXY = walkEndPos.x;
                 playeridxXY = playeridx.x;
@@ -351,11 +352,11 @@ public class GameManager : MonoBehaviour
                     // 이동 중 이벤트 처리
                     blockManager.MoveEvent(BlockManager.Obj.PLAYER, walkStartPos, walkEndPos);
                 }
-                player.transform.position = nextPos;
+                SetPlayerPosition(nextPos);
             }
             else
             {
-                player.transform.position = (Vector2)walkEndPos;
+                SetPlayerPosition(walkEndPos);
                 moveState = MoveState.POSTANIME;
             }
         }
@@ -419,7 +420,7 @@ public class GameManager : MonoBehaviour
     {
         Vector2Int nextPos = blockManager.GetPortalExit(playeridx);
         playeridx = nextPos;
-        player.transform.position = (Vector2)nextPos;
+        SetPlayerPosition(nextPos);
     }
 
     // 라이프 조정 (value값 음수 가능)
@@ -593,5 +594,20 @@ public class GameManager : MonoBehaviour
     public Vector2Int GetPlayerIdx()
     {
         return playeridx;
+    }
+
+    void SetPlayerPosition(Vector2 pos)
+    {
+        player.transform.position = pos + playerOffset;
+    }
+
+    void SetPlayerPostion(Vector2Int pos)
+    {
+        player.transform.position = (Vector2)pos + playerOffset;
+    }
+
+    Vector2 GetPlayerPosition()
+    {
+        return player.transform.position - (Vector3)playerOffset;
     }
 }

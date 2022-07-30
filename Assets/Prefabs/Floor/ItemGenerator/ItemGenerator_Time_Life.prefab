@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7229694421635417547}
   - component: {fileID: -6632280557178283507}
   m_Layer: 0
-  m_Name: ItemGenerator
+  m_Name: ItemGenerator_Time_Life
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,10 +58,10 @@ MonoBehaviour:
   upExitable: 1
   downExitable: 1
   floorType: 5
-  product: 5
-  generatorType: 0
-  cycle: 0
   powerDefault: 0
+  generatorType: 1
+  generationCycle: 40
+  product: 5
 --- !u!212 &-6632280557178283507
 SpriteRenderer:
   m_ObjectHideFlags: 0

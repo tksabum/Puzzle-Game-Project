@@ -12,11 +12,10 @@ public class ItemGenerator : Floorbase
 
     [Header("- Item Generator -")]
     public bool powerDefault;
+    public GeneratorType generatorType;
     public int generationCycle;
-
-    BlockManager.Obj product;
-    GeneratorType generatorType;
-
+    public BlockManager.Obj product;
+    
     bool isObjectEntered;
 
     private new void Awake()
@@ -24,20 +23,22 @@ public class ItemGenerator : Floorbase
         base.Awake();
 
         isObjectEntered = false;
-        power = false;
+        power = powerDefault;
     }
 
-    // ItemGenerator에서 생성되는 아이템 설정
-    public void SetProduct(BlockManager.Obj obj)
-    {
-        product = obj;
-    }
 
-    // 아이템 생성방식 설정
-    public void SetGeneratorType(GeneratorType type)
-    {
-        generatorType = type;
-    }
+    //// ItemGenerator에서 생성되는 아이템 설정
+    //public void SetProduct(BlockManager.Obj obj)
+    //{
+    //    product = obj;
+    //}
+
+    //// 아이템 생성방식 설정
+    //public void SetGeneratorType(GeneratorType type)
+    //{
+    //    generatorType = type;
+    //}
+
 
     // 게임시작시 플레이어, 아이템이 위에 있다면 실행되야 함
     // 플레이어 이동시 PreMoveEvent에서 실행되야 함
