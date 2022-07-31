@@ -65,7 +65,7 @@ public class ItemGenerator : Floorbase
 
     public void GenerateItem(BlockManager blockManager)
     {
-
+        blockManager.GenerateItem(product, idx);
     }
 
     public void Tick(BlockManager blockManager, int tickCount)

@@ -449,4 +449,36 @@ public class BlockManager : MonoBehaviour
             }
         }
     }
+
+    public void GenerateItem(Obj obj, Vector2Int genIdx)
+    {
+        string objName = "";
+        if (obj == Obj.WOODENBOX)
+        {
+            objName = "WoodenBox";
+        }
+        else if (obj == Obj.HAMMER)
+        {
+            objName = "Hammer";
+        }
+        else if (obj == Obj.LIFE)
+        {
+            objName = "Life";
+        }
+
+
+        if (objName == "")
+        {
+            throw new System.Exception("Error: unknown objName " + obj);
+        }
+        else
+        {
+            // 아이템이 생성될 위치가 비어있는 경우에만 생성
+            if (genIdx != gameManager.GetPlayerIdx() && genIdx != gameManager.GetPlayerNextIdx() && itemList[genIdx.x][genIdx.y] == null)
+            {
+                GameObject instant = objectPool.GetObject(objName);
+                itemList[genIdx.x][genIdx.y] = instant.GetComponent<Itembase>();
+            }
+        }
+    }
 }

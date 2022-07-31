@@ -596,6 +596,16 @@ public class GameManager : MonoBehaviour
         return playeridx;
     }
 
+    public Vector2Int GetPlayerNextIdx()
+    {
+        if (walkEndPos == null)
+        {
+            return playeridx;
+        }
+
+        return walkEndPos;
+    }
+
     void SetPlayerPosition(Vector2 pos)
     {
         player.transform.position = pos + playerOffset;
