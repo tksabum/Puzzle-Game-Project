@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7229694421635417547}
   - component: {fileID: -6632280557178283507}
   m_Layer: 0
-  m_Name: ItemGenerator_Power_Life
+  m_Name: ItemGenerator_10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,9 +59,9 @@ MonoBehaviour:
   downExitable: 1
   floorType: 5
   powerDefault: 0
-  product: 5
   generatorType: 0
   generationCycle: 40
+  product: 4
 --- !u!212 &-6632280557178283507
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -103,7 +103,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 35b0b583b571c314b9e2af1a9479ecea, type: 3}
+  m_Sprite: {fileID: 803400398, guid: 6b6bc462d719df84b90f1e2a0679eaaf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
