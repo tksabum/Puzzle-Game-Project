@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     [Header("- UI -")]
     public UIManager uiManager;
     public Button pauseButton;
+    public MessageManager messageManager;
 
     [Header("- Block -")]
     public BlockManager blockManager;
@@ -71,6 +72,11 @@ public class GameManager : MonoBehaviour
     float lastTickTimer;
     float tickTimer;
 
+    private void Awake()
+    {
+        messageManager.Init();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -94,6 +100,9 @@ public class GameManager : MonoBehaviour
         blockManager.SetBlock(mapData);
 
         lastTickTimer = Time.time;
+
+        // 테스트를 위해 MessageManager에 임시로 1-1을 고정적으로 보냄
+        messageManager.ShowMessage("Story 1-1");
     }
 
     // Update is called once per frame
