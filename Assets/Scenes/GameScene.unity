@@ -493,7 +493,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 213495213}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1879824033}
+        m_TargetAssemblyTypeName: MessageManager, Assembly-CSharp
+        m_MethodName: ButtonNext
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &213495213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1254,7 +1266,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1879824033}
+        m_TargetAssemblyTypeName: MessageManager, Assembly-CSharp
+        m_MethodName: ChangeToggleIgnore
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!114 &651148559
 MonoBehaviour:
@@ -1458,7 +1482,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 768111463}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1879824033}
+        m_TargetAssemblyTypeName: MessageManager, Assembly-CSharp
+        m_MethodName: ButtonPrev
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &768111463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2069,7 +2105,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1025810277}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1879824033}
+        m_TargetAssemblyTypeName: MessageManager, Assembly-CSharp
+        m_MethodName: ButtonClose
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1025810277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4250,6 +4298,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1879824030}
   - component: {fileID: 1879824032}
+  - component: {fileID: 1879824034}
   - component: {fileID: 1879824033}
   m_Layer: 5
   m_Name: Message
@@ -4299,9 +4348,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b41efb4554ab2a143a2d07eddd10b5b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 1013562112}
   content: {fileID: 2135066015}
+  textPage: {fileID: 1176645846}
+  toggleIgnore: {fileID: 651148558}
   firstManual:
-  - {fileID: 1587993121555609427, guid: 20b79dfd81a99e94c8a54c92cbf31c93, type: 3}
+  - {fileID: 1587993121555609427, guid: a97e784058c41a843a1139634454d99a, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -4366,6 +4418,36 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &1879824034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879824029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.22745098}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1936414826
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 
 
 public class MessageManager : MonoBehaviour
 {
+    [Header("- Core -")]
+    public GameManager gameManager;
+
     [Header("- UI -")]
     public Transform content;
+    public Text textPage;
+    public Toggle toggleIgnore;
 
     [Header("- Manual -")]
     public List<GameObject> firstManual;
@@ -24,6 +30,7 @@ public class MessageManager : MonoBehaviour
     List<List<GameObject>> storyList;
 
     Message lastMessage;
+    Vector2Int lastMapNum;
     GameObject currentMessage;
     int currentPage;
     int pageCount;
@@ -36,15 +43,31 @@ public class MessageManager : MonoBehaviour
 
     public void Init()
     {
-        manualList = new List<List<GameObject>>();
-        manualList.Add(firstManual);
-        manualList.Add(secondManual);
-        manualList.Add(thirdManual);
+        if (manualList == null)
+        {
+            manualList = new List<List<GameObject>>();
+            manualList.Add(firstManual);
+            manualList.Add(secondManual);
+            manualList.Add(thirdManual);
+        }
+        
+        if (storyList == null)
+        {
+            storyList = new List<List<GameObject>>();
+            storyList.Add(firstStory);
+            storyList.Add(secondStory);
+            storyList.Add(thirdStory);
+        }
 
-        storyList = new List<List<GameObject>>();
-        storyList.Add(firstStory);
-        storyList.Add(secondStory);
-        storyList.Add(thirdStory);
+        int intIgnore = PlayerPrefs.GetInt("DontShowMessage", 0);
+        if (intIgnore != 0)
+        {
+            toggleIgnore.isOn = true;
+        }
+        else
+        {
+            toggleIgnore.isOn = false;
+        }
     }
 
     public void ShowMessage(string mapName)
@@ -65,22 +88,77 @@ public class MessageManager : MonoBehaviour
 
     public void CloseMessage()
     {
+        Destroy(currentMessage);
+        currentMessage = null;
 
+        string key = "Ignore_";
+        if (lastMessage == Message.STORY)
+        {
+            key += "Story_";
+        }
+        else
+        {
+            key += "Manual_";
+        }
+
+        key += lastMapNum.x + "-" + lastMapNum.y;
+
+        int value;
+        if (toggleIgnore.isOn) value = 1;
+        else value = 0;
+
+        PlayerPrefs.SetInt(key, value);
+
+        if (lastMessage == Message.STORY)
+        {
+            ShowManual(lastMapNum);
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            gameObject.SetActive(false);
+        }
     }
 
     public void ButtonPrev()
     {
-
+        int nextPage = Mathf.Clamp(currentPage - 1, 0, pageCount - 1);
+        if (currentPage != nextPage)
+        {
+            currentMessage.transform.GetChild(currentPage).gameObject.SetActive(false);
+            currentMessage.transform.GetChild(nextPage).gameObject.SetActive(true);
+            currentPage = nextPage;
+            textPage.text = (currentPage + 1) + " / " + pageCount;
+        }
     }
 
     public void ButtonNext()
     {
-
+        int nextPage = Mathf.Clamp(currentPage + 1, 0, pageCount - 1);
+        if (currentPage != nextPage)
+        {
+            currentMessage.transform.GetChild(currentPage).gameObject.SetActive(false);
+            currentMessage.transform.GetChild(nextPage).gameObject.SetActive(true);
+            currentPage = nextPage;
+            textPage.text = (currentPage + 1) + " / " + pageCount;
+        }
     }
 
     public void ButtonClose()
     {
         CloseMessage();
+    }
+
+    public void ChangeToggleIgnore()
+    {
+        if (toggleIgnore.isOn)
+        {
+            PlayerPrefs.SetInt("DontShowMessage", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("DontShowMessage", 0);
+        }
     }
 
     Vector2Int GetMapNum(string mapName)
@@ -118,9 +196,12 @@ public class MessageManager : MonoBehaviour
         }
         GameObject story = storyList[mapNum.x][mapNum.y];
 
-        if (story != null)
+        string key = "Ignore_Story_" + mapNum.x + "-" + mapNum.y;
+
+        if (story != null && PlayerPrefs.GetInt(key, 0) != 1)
         {
             SetContent(story);
+            lastMapNum = mapNum;
             lastMessage = Message.STORY;
             return true;
         }
@@ -136,9 +217,12 @@ public class MessageManager : MonoBehaviour
         }
         GameObject manual = manualList[mapNum.x][mapNum.y];
 
-        if (manual != null)
+        string key = "Ignore_Manual_" + mapNum.x + "-" + mapNum.y;
+
+        if (manual != null && PlayerPrefs.GetInt(key, 0) != 1)
         {
             SetContent(manual);
+            lastMapNum = mapNum;
             lastMessage = Message.MANUAL;
             return true;
         }
@@ -155,6 +239,9 @@ public class MessageManager : MonoBehaviour
 
         currentMessage.transform.GetChild(currentPage).gameObject.SetActive(true);
 
+        textPage.text = (currentPage + 1) + " / " + pageCount;
+
+        Time.timeScale = 0f;
         gameObject.SetActive(true);
     }
 }

@@ -101,8 +101,8 @@ public class GameManager : MonoBehaviour
 
         lastTickTimer = Time.time;
 
-        // 테스트를 위해 MessageManager에 임시로 1-1을 고정적으로 보냄
-        messageManager.ShowMessage("Story 1-1");
+        // 스토리, 조작법 띄우기
+        messageManager.ShowMessage(mapName);
     }
 
     // Update is called once per frame
@@ -548,6 +548,9 @@ public class GameManager : MonoBehaviour
         Init();
 
         blockManager.ResetBlock();
+
+        // 스토리, 조작법 띄우기
+        messageManager.ShowMessage(mapName);
     }
 
     // 다음맵으로 게임 초기화
@@ -598,6 +601,9 @@ public class GameManager : MonoBehaviour
 
         blockManager.RemoveBlock();
         blockManager.SetBlock(mapData);
+
+        // 스토리, 조작법 띄우기
+        messageManager.ShowMessage(mapName);
     }
 
     public Vector2Int GetPlayerIdx()
