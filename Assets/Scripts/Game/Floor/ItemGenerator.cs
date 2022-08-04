@@ -22,6 +22,11 @@ public class ItemGenerator : Floorbase
     {
         base.Awake();
 
+        Init();
+    }
+
+    void Init()
+    {
         isObjectEntered = false;
         power = powerDefault;
     }
@@ -59,7 +64,6 @@ public class ItemGenerator : Floorbase
         // 전원이 켜질 때 위에 놓여진 아이템이 없는 경우
         if (generatorType == GeneratorType.POWER && power && !isObjectEntered)
         {
-
             GenerateItem(gameManager.blockManager);
         }
     }
@@ -75,5 +79,10 @@ public class ItemGenerator : Floorbase
         {
             GenerateItem(blockManager);
         }
+    }
+
+    void OnDisable()
+    {
+        Init();
     }
 }
