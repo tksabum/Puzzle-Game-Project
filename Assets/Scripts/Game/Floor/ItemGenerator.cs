@@ -55,10 +55,11 @@ public class ItemGenerator : Floorbase
     public override void PowerToggle(GameManager gameManager)
     {
         power = !power;
-        
+
         // 전원이 켜질 때 위에 놓여진 아이템이 없는 경우
         if (generatorType == GeneratorType.POWER && power && !isObjectEntered)
         {
+
             GenerateItem(gameManager.blockManager);
         }
     }
