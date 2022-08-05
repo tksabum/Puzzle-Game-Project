@@ -16,9 +16,20 @@ public class UsableItem : Itembase
         
     }
 
-    public override void OnPlayerEnter(GameManager gameManager)
+    public override void OnPrePlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
+    {
+
+    }
+
+    public override void OnPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
+    {
+        
+    }
+
+    public override void OnPostPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
     {
         gameManager.GetItem(obj);
+        blockManager.RemoveItem(this, itemidx);
     }
 
     public override void OnPlayerExit()

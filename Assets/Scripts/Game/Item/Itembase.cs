@@ -22,7 +22,9 @@ public abstract class Itembase : MonoBehaviour
     }
 
     // 플레이어가 올라오면 실행
-    public abstract void OnPlayerEnter(GameManager gameManager);
+    public abstract void OnPrePlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx);
+    public abstract void OnPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx);
+    public abstract void OnPostPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx);
 
     // 플레이어가 나가면 실행
     public abstract void OnPlayerExit();
