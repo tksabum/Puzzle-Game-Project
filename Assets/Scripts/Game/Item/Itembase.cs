@@ -22,9 +22,29 @@ public abstract class Itembase : MonoBehaviour
     }
 
     // 플레이어가 올라오면 실행
-    public abstract void OnPrePlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx);
-    public abstract void OnPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx);
-    public abstract void OnPostPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx);
+    public virtual void OnPrePlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
+    {
+        if (pushable)
+        {
+            blockManager.PreItemMoveEvent(this, itemidx, 2 * itemidx - enteridx);
+        }
+    }
+
+    public virtual void OnPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
+    {
+        if (pushable)
+        {
+            blockManager.ItemMoveEvent(this, itemidx, 2 * itemidx - enteridx);
+        }
+    }
+
+    public virtual void OnPostPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
+    {
+        if (pushable)
+        {
+            blockManager.PostItemMoveEvent(this, itemidx, 2 * itemidx - enteridx);
+        }
+    }
 
     // 플레이어가 나가면 실행
     public abstract void OnPlayerExit();

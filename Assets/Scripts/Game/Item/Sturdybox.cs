@@ -18,19 +18,17 @@ public class Sturdybox : Itembase
 
     public override void OnPrePlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
     {
-        Vector2Int move = itemidx - enteridx;
-
-        blockManager.MoveItem(this, itemidx, itemidx + move);
+        base.OnPrePlayerEnter(gameManager, blockManager, enteridx, itemidx);
     }
 
     public override void OnPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
     {
-
+        base.OnPlayerEnter((GameManager)gameManager, blockManager, enteridx, itemidx);
     }
 
     public override void OnPostPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
     {
-
+        base.OnPostPlayerEnter((GameManager)gameManager, blockManager, enteridx, itemidx);
     }
 
     public override void OnPlayerExit()

@@ -18,16 +18,18 @@ public class Goal : Itembase
 
     public override void OnPrePlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
     {
-        
+        base.OnPrePlayerEnter(gameManager, blockManager, enteridx, itemidx);
     }
 
     public override void OnPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
     {
-        
+        base.OnPlayerEnter(gameManager, blockManager, enteridx, itemidx);
     }
 
     public override void OnPostPlayerEnter(GameManager gameManager, BlockManager blockManager, Vector2Int enteridx, Vector2Int itemidx)
     {
+        base.OnPostPlayerEnter(gameManager, blockManager, enteridx, itemidx);
+
         gameManager.GetGoal();
     }
 

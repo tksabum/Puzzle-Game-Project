@@ -27,6 +27,11 @@ public class BlockManager : MonoBehaviour
 
     int tickCount;
 
+    Itembase moveItem;
+    Vector2Int moveItemStartidx;
+    Vector2Int moveItemEndidx;
+    bool isMove;
+
     string GetFloorString(Vector3Int vector)
     {
         return mapData.floorData[vector.x][vector.y];
@@ -468,7 +473,7 @@ public class BlockManager : MonoBehaviour
         else
         {
             // 아이템이 생성될 위치가 비어있는 경우에만 생성
-            if (genIdx != gameManager.GetPlayerIdx() && genIdx != gameManager.GetPlayerNextIdx() && itemList[genIdx.x][genIdx.y] == null)
+            if (genIdx != gameManager.GetPlayerIdx() && genIdx != gameManager.GetPlayerNextIdx() && itemList[genIdx.x][genIdx.y] == null && (!isMove || moveItemEndidx != genIdx))
             {
                 // 아이템 생성
                 GameObject instant = objectPool.GetObject(objName);
@@ -483,17 +488,46 @@ public class BlockManager : MonoBehaviour
         }
     }
 
-    public void MoveItem(Itembase item, Vector2Int nowidx, Vector2Int nextidx)
+    public void PreItemMoveEvent(Itembase item, Vector2Int nowidx, Vector2Int nextidx)
     {
-        itemList[nextidx.x][nextidx.y] = item;
-        itemList[nowidx.x][nowidx.y] = null;
-        item.transform.position = new Vector3Int(nextidx.x, nextidx.y, 0);
+        moveItem = item;
+        moveItemStartidx = nowidx;
+        moveItemEndidx = nextidx;
+        isMove = true;
+
         floorList[nowidx.x][nowidx.y].OnPreObjectExit(gameManager, this, item.obj);
-        floorList[nowidx.x][nowidx.y].OnObjectExit(gameManager, this, item.obj);
-        floorList[nowidx.x][nowidx.y].OnPostObjectExit(gameManager, this, item.obj);
         floorList[nextidx.x][nextidx.y].OnPreObjectEnter(gameManager, this, item.obj);
+    }
+
+    public void ItemMoveEvent(Itembase item, Vector2Int nowidx, Vector2Int nextidx)
+    {
+        floorList[nowidx.x][nowidx.y].OnObjectExit(gameManager, this, item.obj);
         floorList[nextidx.x][nextidx.y].OnObjectEnter(gameManager, this, item.obj);
+    }
+
+    public void PostItemMoveEvent(Itembase item, Vector2Int nowidx, Vector2Int nextidx)
+    {
+        floorList[nowidx.x][nowidx.y].OnPostObjectExit(gameManager, this, item.obj);
         floorList[nextidx.x][nextidx.y].OnPostObjectEnter(gameManager, this, item.obj);
+    }
+
+    public void ItemMoveUpdate(Vector2 itemPos, bool isChangedidx)
+    {
+        if (isMove)
+        {
+            moveItem.transform.position = itemPos;
+
+            if (isChangedidx)
+            {
+                itemList[moveItemEndidx.x][moveItemEndidx.y] = moveItem;
+                itemList[moveItemStartidx.x][moveItemStartidx.y] = null;
+            }
+
+            if (itemPos == (Vector2)moveItemEndidx)
+            {
+                isMove = false;
+            }
+        }
     }
     
     public void RemoveItem(Itembase item, Vector2Int idx)
