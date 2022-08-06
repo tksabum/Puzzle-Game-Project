@@ -17,10 +17,14 @@ public abstract class Floorbase : MonoBehaviour
     [Header("- EnterObject -")]
     public bool playerEnterable;
     public bool woodenboxEnterable;
+    public bool sturdyboxEnterable;
+    public bool steelboxEnterable;
 
     [Header("- ExitObject -")]
     public bool playerExitable;
     public bool woodenboxExitable;
+    public bool sturdyboxExitable;
+    public bool steelboxExitable;
 
     [Header("- EnterDirection -")]
     public bool leftEnterable;
@@ -45,7 +49,7 @@ public abstract class Floorbase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void SetIdx(Vector2Int _idx)
@@ -64,6 +68,14 @@ public abstract class Floorbase : MonoBehaviour
         else if (obj == BlockManager.Obj.WOODENBOX)
         {
             if (!woodenboxEnterable) return false;
+        }
+        else if (obj == BlockManager.Obj.STURDYBOX)
+        {
+            if (!sturdyboxEnterable) return false;
+        }
+        else if (obj == BlockManager.Obj.STEELBOX)
+        {
+            if (!steelboxEnterable) return false;
         }
         else
         {
@@ -90,6 +102,14 @@ public abstract class Floorbase : MonoBehaviour
         else if (obj == BlockManager.Obj.WOODENBOX)
         {
             if (!woodenboxExitable) return false;
+        }
+        else if (obj == BlockManager.Obj.STURDYBOX)
+        {
+            if (!sturdyboxExitable) return false;
+        }
+        else if (obj == BlockManager.Obj.STEELBOX)
+        {
+            if (!steelboxExitable) return false;
         }
         else
         {

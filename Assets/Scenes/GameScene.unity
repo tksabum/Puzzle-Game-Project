@@ -1593,6 +1593,9 @@ MonoBehaviour:
   - {fileID: 6517240182617039132, guid: 88579aada0280754d8bf96dfb40e7b62, type: 3}
   - {fileID: 3196312527637588017, guid: 63067eda528a50b4983efbf295155991, type: 3}
   - {fileID: 4782004500515657041, guid: b6226df64fb34c14c925d7d4df6f33eb, type: 3}
+  - {fileID: 3196312527637588017, guid: a3f69750df3063245b3dbe9db4836393, type: 3}
+  - {fileID: 3196312527637588017, guid: d8dd36133cfffcf4ea0330b8d64ec73e, type: 3}
+  - {fileID: 3196312527637588017, guid: 1440a2e76139dbd43aa65c1e15f4ecaf, type: 3}
   floorgroup: {fileID: 962888593}
   itemgroup: {fileID: 1475560371}
 --- !u!1 &802192101
