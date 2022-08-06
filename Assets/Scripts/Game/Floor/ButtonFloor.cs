@@ -41,12 +41,9 @@ public class ButtonFloor : Floorbase
 
     public override void OnObjectEnter(GameManager gameManager, BlockManager blockManager, BlockManager.Obj obj)
     {
-        if (obj == BlockManager.Obj.PLAYER || obj == BlockManager.Obj.WOODENBOX)
-        {
-            blockManager.PowerToggle(idx);
-            isPressed = true;
-            RefreshSprite();
-        }
+        blockManager.PowerToggle(idx);
+        isPressed = true;
+        RefreshSprite();
     }
 
     public override void OnPostObjectEnter(GameManager gameManager, BlockManager blockManager, BlockManager.Obj obj)
@@ -61,12 +58,9 @@ public class ButtonFloor : Floorbase
 
     public override void OnObjectExit(GameManager gameManager, BlockManager blockManager, BlockManager.Obj obj)
     {
-        if (obj == BlockManager.Obj.PLAYER || obj == BlockManager.Obj.WOODENBOX)
-        {
-            blockManager.PowerToggle(idx);
-            isPressed = false;
-            RefreshSprite();
-        }
+        blockManager.PowerToggle(idx);
+        isPressed = false;
+        RefreshSprite();
     }
 
     public override void OnPostObjectExit(GameManager gameManager, BlockManager blockManager, BlockManager.Obj obj)
