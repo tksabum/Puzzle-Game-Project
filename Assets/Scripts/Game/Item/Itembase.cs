@@ -4,10 +4,14 @@ using UnityEngine;
 
 public abstract class Itembase : MonoBehaviour
 {
+    [Header("- Core -")]
     public BlockManager.Obj obj;
     public bool getable;
     public bool breakable;
     public bool pushable;
+
+    [Header("- Pushable")]
+    public int pushCost;
 
     // Start is called before the first frame update
     void Start()

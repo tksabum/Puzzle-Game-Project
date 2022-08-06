@@ -420,6 +420,11 @@ public class GameManager : MonoBehaviour
         addLife(-1);
     }
 
+    public void AttackedPlayer(int damage)
+    {
+        addLife(-damage);
+    }
+
     // 특정 위치 공격 받음
     public void AttackedPos(Vector2Int attackedidx)
     {
@@ -639,5 +644,10 @@ public class GameManager : MonoBehaviour
     Vector2 GetPlayerPosition()
     {
         return player.transform.position - (Vector3)playerOffset;
+    }
+
+    public int GetLife()
+    {
+        return life;
     }
 }

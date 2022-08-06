@@ -141,7 +141,7 @@ public class BlockManager : MonoBehaviour
         // 움직일 오브젝트가 아이템인 경우
         else
         {
-            if (itemList[nowidx.x][nowidx.y].pushable)
+            if (itemList[nowidx.x][nowidx.y].pushable && itemList[nowidx.x][nowidx.y].pushCost < gameManager.GetLife())
             {
                 if (itemList[nextidx.x][nextidx.y] == null)
                 {
@@ -521,6 +521,8 @@ public class BlockManager : MonoBehaviour
             {
                 itemList[moveItemEndidx.x][moveItemEndidx.y] = moveItem;
                 itemList[moveItemStartidx.x][moveItemStartidx.y] = null;
+
+                gameManager.AttackedPlayer(moveItem.pushCost);
             }
 
             if (itemPos == (Vector2)moveItemEndidx)
