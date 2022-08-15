@@ -17,6 +17,8 @@ public class SliderComponent : MonoBehaviour
 
     Slider slider;
 
+    AudioSource bgmSource;
+
     private void Awake()
     {
         slider = GetComponent<Slider>();
@@ -29,5 +31,15 @@ public class SliderComponent : MonoBehaviour
     {
         text.text = "" + slider.value;
         PlayerPrefs.SetInt("SoundSetting" + type, (int)slider.value);
+
+        if (type == Type.BGM)
+        {
+            if (bgmSource == null)
+            {
+                bgmSource = GameObject.Find("BGM Source").GetComponent<AudioSource>();
+            }
+
+            bgmSource.volume = slider.value * 0.1f;
+        }
     }
 }
