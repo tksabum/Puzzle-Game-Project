@@ -423,7 +423,9 @@ public class BlockManager : MonoBehaviour
         floorList[playeridx.x][playeridx.y].OnObjectEnter(gameManager, this, Obj.PLAYER);
         floorList[playeridx.x][playeridx.y].OnPostObjectEnter(gameManager, this, Obj.PLAYER);
 
+        // 변수 초기화
         tickCount = 0;
+        isMove = false;
     }
 
     // 동일한 맵으로 초기화
