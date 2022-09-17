@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            appPath = Application.dataPath;
+            appPath = Application.persistentDataPath;
         }
     }
 

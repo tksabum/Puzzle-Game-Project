@@ -83,6 +83,6 @@ public class DataBus : MonoBehaviour
 
         writeLock = false;
         str = null;
-        startState = State.TITLE;
+        startState = State.LOADING;
     }
 }
