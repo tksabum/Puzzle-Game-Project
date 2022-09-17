@@ -25,11 +25,14 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     public bool SnapX { get { return snapX; } set { snapX = value; } }
     public bool SnapY { get { return snapY; } set { snapY = value; } }
 
+    public bool SingleAxis { get { return singleAxis; } set { singleAxis = value; } }
+
     [SerializeField] private float handleRange = 1;
     [SerializeField] private float deadZone = 0;
     [SerializeField] private AxisOptions axisOptions = AxisOptions.Both;
     [SerializeField] private bool snapX = false;
     [SerializeField] private bool snapY = false;
+    [SerializeField] private bool singleAxis = false;
 
     [SerializeField] protected RectTransform background = null;
     [SerializeField] private RectTransform handle = null;
@@ -97,6 +100,26 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     private float SnapFloat(float value, AxisOptions snapAxis)
     {
+        float HSangle;
+        float HLangle;
+        float VSangle;
+        float VLangle;
+        if (singleAxis)
+        {
+            HSangle = 45.0f;
+            HLangle = 135.0f;
+            VSangle = 45.0f;
+            VLangle = 135.0f;
+        }
+        else
+        {
+            HSangle = 22.5f;
+            HLangle = 157.5f;
+            VSangle = 67.5f;
+            VLangle = 112.5f;
+        }
+
+
         if (value == 0)
             return value;
 
@@ -105,14 +128,14 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
             float angle = Vector2.Angle(input, Vector2.up);
             if (snapAxis == AxisOptions.Horizontal)
             {
-                if (angle < 22.5f || angle > 157.5f)
+                if (angle <= HSangle || angle >= HLangle)
                     return 0;
                 else
                     return (value > 0) ? 1 : -1;
             }
             else if (snapAxis == AxisOptions.Vertical)
             {
-                if (angle > 67.5f && angle < 112.5f)
+                if (angle >= VSangle && angle <= VLangle)
                     return 0;
                 else
                     return (value > 0) ? 1 : -1;

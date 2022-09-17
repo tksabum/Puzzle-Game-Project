@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     [Header("- Block -")]
     public BlockManager blockManager;
 
-    [Header("- Player - ")]
+    [Header("- Player -")]
     public GameObject player;
     public Animator playerAnimator;
     public float playerSpeed;
@@ -49,6 +49,11 @@ public class GameManager : MonoBehaviour
     int life;
 
     BlockManager.Obj preparedItem;
+
+    [Header("- Controller -")]
+    public VariableJoystick joystick;
+    public bool hideJoystick;
+    public TouchPanel itemPanel;
 
     [Header(" - Camera - ")]
     public Camera mainCamera;
@@ -72,9 +77,38 @@ public class GameManager : MonoBehaviour
     float lastTickTimer;
     float tickTimer;
 
+    string appPath;
+
     private void Awake()
     {
         messageManager.Init();
+
+        // 조이스틱 활성화, 비활성화
+        if (Application.platform == RuntimePlatform.WindowsEditor)
+        {
+            if (!hideJoystick)
+            {
+                joystick.gameObject.SetActive(true);
+            }
+        }
+        else if (Application.platform == RuntimePlatform.Android)
+        {
+            joystick.gameObject.SetActive(true);
+        }
+        else if (Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            joystick.gameObject.SetActive(true);
+        }
+
+        // appPath 설정
+        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            appPath = Application.persistentDataPath;
+        }
+        else
+        {
+            appPath = Application.dataPath;
+        }
     }
 
     // Start is called before the first frame update
@@ -87,8 +121,8 @@ public class GameManager : MonoBehaviour
             mapName = testMapName;
         }
 
-        dataPath = Application.dataPath + "/MapData/" + mapName + ".dat";
-
+        dataPath = appPath + "/MapData/" + mapName + ".dat";
+        
         mapData = Load();
 
         startidx = new Vector2Int(mapData.startIdx.x, mapData.startIdx.y);
@@ -167,7 +201,7 @@ public class GameManager : MonoBehaviour
     // 아이템 사용
     void UseItem()
     {
-        if (!playerWalk && preparedItem != BlockManager.Obj.EMPTY && Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.USE_ITEM]))
+        if (!playerWalk && preparedItem != BlockManager.Obj.EMPTY && GetInput(CustomKeyCode.USE_ITEM))
         {
             if (preparedItem == BlockManager.Obj.HAMMER)
             {
@@ -263,22 +297,22 @@ public class GameManager : MonoBehaviour
     {
         Vector2Int moveDir = Vector2Int.zero;
 
-        if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.RIGHT]))
+        if (GetInput(CustomKeyCode.RIGHT))
         {
             moveDir = Vector2Int.right;
             playerDirection = BlockManager.Direction.RIGHT;
         }
-        else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.LEFT]))
+        else if (GetInput(CustomKeyCode.LEFT))
         {
             moveDir = Vector2Int.left;
             playerDirection = BlockManager.Direction.LEFT;
         }
-        else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.UP]))
+        else if (GetInput(CustomKeyCode.UP))
         {
             moveDir = Vector2Int.up;
             playerDirection = BlockManager.Direction.UP;
         }
-        else if (Input.GetKey(InputManager.Instance.keyDic[CustomKeyCode.DOWN]))
+        else if (GetInput(CustomKeyCode.DOWN))
         {
             moveDir = Vector2Int.down;
             playerDirection = BlockManager.Direction.DOWN;
@@ -599,7 +633,7 @@ public class GameManager : MonoBehaviour
         mapName = nextMapName;
 
 
-        dataPath = Application.dataPath + "/MapData/" + mapName + ".dat";
+        dataPath = appPath + "/MapData/" + mapName + ".dat";
 
         mapData = Load();
 
@@ -649,5 +683,76 @@ public class GameManager : MonoBehaviour
     public int GetLife()
     {
         return life;
+    }
+
+    public bool GetInput(CustomKeyCode customKeyCode)
+    {
+        bool usingJoystick = false;
+        if (Application.platform == RuntimePlatform.Android ||
+            Application.platform == RuntimePlatform.IPhonePlayer ||
+            (Application.platform == RuntimePlatform.WindowsEditor && !hideJoystick))
+        {
+            usingJoystick = true;
+        }
+
+        if (customKeyCode == CustomKeyCode.LEFT)
+        {
+            if (usingJoystick)
+            {
+                return joystick.Horizontal < 0;
+            }
+            else
+            {
+                return Input.GetKey(InputManager.Instance.keyDic[customKeyCode]);
+            }
+        }
+        else if (customKeyCode == CustomKeyCode.RIGHT)
+        {
+            if (usingJoystick)
+            {
+                return joystick.Horizontal > 0;
+            }
+            else
+            {
+                return Input.GetKey(InputManager.Instance.keyDic[customKeyCode]);
+            }
+        }
+        else if (customKeyCode == CustomKeyCode.UP)
+        {
+            if (usingJoystick)
+            {
+                return joystick.Vertical > 0;
+            }
+            else
+            {
+                return Input.GetKey(InputManager.Instance.keyDic[customKeyCode]);
+            }
+        }
+        else if (customKeyCode == CustomKeyCode.DOWN)
+        {
+            if (usingJoystick)
+            {
+                return joystick.Vertical < 0;
+            }
+            else
+            {
+                return Input.GetKey(InputManager.Instance.keyDic[customKeyCode]);
+            }
+        }
+        else if (customKeyCode == CustomKeyCode.USE_ITEM)
+        {
+            if (usingJoystick)
+            {
+                return itemPanel.Touch;
+            }
+            else
+            {
+                return Input.GetKey(InputManager.Instance.keyDic[customKeyCode]);
+            }
+        }
+        else
+        {
+            throw new System.Exception("Error:Unknown keycode " + customKeyCode);
+        }
     }
 }
