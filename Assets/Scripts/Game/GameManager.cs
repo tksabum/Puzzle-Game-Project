@@ -63,6 +63,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Zoom In 상태에서 플레이어가 구석에 있을 때 보이는 맵 밖의 여백")]
     public float padding;
 
+    bool isLastTouchDouble;
+    float lastTouchDist;
+
     [Header(" - File - ")]
     public string testMapName;
 
@@ -227,12 +230,37 @@ public class GameManager : MonoBehaviour
         float verMin = -0.5f + cameraHeight - padding;
         float verMax = (float)mapData.mapHeight - 0.5f - cameraHeight + padding;
 
-        float scroll = Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
         float maxCameraSizeHeight = ((float)mapData.mapHeight + 2 * padding) / 2f;
         float maxCameraSizeWidth = ((float)mapData.mapWidth + 2 * padding) / (2f * mainCamera.aspect);
         float maxCameraSizeTotal = Mathf.Clamp(Mathf.Max(maxCameraSizeHeight, maxCameraSizeWidth), minCameraSize, maxCameraSize);
 
-        mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize - scroll, minCameraSize, maxCameraSizeTotal);
+        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            if (Input.touchCount == 2)
+            {
+                if (!isLastTouchDouble)
+                {
+                    lastTouchDist = (Input.touches[0].position - Input.touches[1].position).sqrMagnitude;
+                    isLastTouchDouble = true;
+                }
+                
+                // 2개 터치한 상태로 이동시
+                if (Input.touches[0].phase == TouchPhase.Moved || Input.touches[1].phase == TouchPhase.Moved)
+                {
+                    float nowTouchDist = (Input.touches[0].position - Input.touches[1].position).sqrMagnitude;
+                    mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize * (nowTouchDist / lastTouchDist), minCameraSize, maxCameraSizeTotal);
+                }
+            }
+            else
+            {
+                isLastTouchDouble = false;
+            }
+        }
+        else
+        {
+            float scroll = Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
+            mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize - scroll, minCameraSize, maxCameraSizeTotal);
+        }
 
         /* 카메라 크기 조정에 필요
         if(scroll != 0f)

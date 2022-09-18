@@ -270,7 +270,7 @@ public class MainManager : MonoBehaviour
 
         for (int i = 0; i < URLs.Count; i++)
         {
-            UnityWebRequest request = UnityWebRequest.Get("https://github.com/tksabum/Mapdata/raw/main/Story%201-1.dat");
+            UnityWebRequest request = UnityWebRequest.Get(URLs[i]);
 
             yield return request.SendWebRequest();
 
