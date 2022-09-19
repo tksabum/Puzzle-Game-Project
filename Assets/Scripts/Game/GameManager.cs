@@ -248,7 +248,9 @@ public class GameManager : MonoBehaviour
                 if (Input.touches[0].phase == TouchPhase.Moved || Input.touches[1].phase == TouchPhase.Moved)
                 {
                     float nowTouchDist = (Input.touches[0].position - Input.touches[1].position).sqrMagnitude;
-                    mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize * (nowTouchDist / lastTouchDist), minCameraSize, maxCameraSizeTotal);
+                    float screenDist = new Vector2((float)Screen.width, (float)Screen.height).sqrMagnitude;
+
+                    mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize + ((lastTouchDist - nowTouchDist) / screenDist), minCameraSize, maxCameraSizeTotal);
                 }
             }
             else
