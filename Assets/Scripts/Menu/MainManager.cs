@@ -37,7 +37,7 @@ public class MainManager : MonoBehaviour
 
     Queue<AudioSource> waitingAudioSource;
 
-    // ÀúÀå ÇÊ¿ä
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
     Vector2Int clearInfo;
 
     private void Awake()
@@ -48,7 +48,7 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Å¬¸®¾îÁ¤º¸ °¡Á®¿À±â
+        // Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         clearInfo = new Vector2Int(PlayerPrefs.GetInt("clearInfo_storyNum", 0), PlayerPrefs.GetInt("clearInfo_mapNum", 10));
 
         Refresh((int)DataBus.Instance.ReadStartState());
@@ -98,8 +98,8 @@ public class MainManager : MonoBehaviour
 
     public void ButtonQuitGame()
     {
-        // ¿¡µðÅÍ¿¡¼­´Â ÇÃ·¹ÀÌ Á¾·á
-        // ¾Û¿¡¼­´Â ¾Û Á¾·á
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // ï¿½Û¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 
@@ -222,69 +222,81 @@ public class MainManager : MonoBehaviour
             dataPath = Application.persistentDataPath;
         }
 
-        if (Directory.Exists(dataPath + "/Mapdata"))
-        {
-            Refresh((int)State.TITLE);
-        }
-        else
-        {
-            StartCoroutine(DownLoadMapData(dataPath));
-        }
+        StartCoroutine(DownLoadMapData(dataPath));
     }
 
     IEnumerator DownLoadMapData(string dataPath)
     {
-        Directory.CreateDirectory(dataPath + "/Mapdata");
-
-        List<string> URLs = new List<string>();
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%201-1.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%201-2.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%201-3.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%201-4.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%201-5.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%201-6.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%201-7.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%201-8.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%201-9.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%201-10.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%202-1.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%202-2.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%202-3.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%202-4.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%202-5.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%202-6.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%202-7.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%202-8.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%202-9.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%202-10.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%203-1.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%203-2.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%203-3.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%203-4.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%203-5.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%203-6.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%203-7.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%203-8.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%203-9.dat");
-        URLs.Add("https://github.com/tksabum/Mapdata/raw/main/Story%203-10.dat");
-
-        for (int i = 0; i < URLs.Count; i++)
+        if (!Directory.Exists(dataPath + "/Mapdata"))
         {
-            UnityWebRequest request = UnityWebRequest.Get(URLs[i]);
+            Directory.CreateDirectory(dataPath + "/Mapdata");
+        }
 
-            yield return request.SendWebRequest();
+        List<KeyValuePair<string, string>> mapList = new List<KeyValuePair<string, string>>();
+        mapList.Add(new KeyValuePair<string, string>("Story 1-1", "https://github.com/tksabum/Mapdata/raw/main/Story%201-1.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 1-2", "https://github.com/tksabum/Mapdata/raw/main/Story%201-2.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 1-3", "https://github.com/tksabum/Mapdata/raw/main/Story%201-3.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 1-4", "https://github.com/tksabum/Mapdata/raw/main/Story%201-4.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 1-5", "https://github.com/tksabum/Mapdata/raw/main/Story%201-5.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 1-6", "https://github.com/tksabum/Mapdata/raw/main/Story%201-6.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 1-7", "https://github.com/tksabum/Mapdata/raw/main/Story%201-7.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 1-8", "https://github.com/tksabum/Mapdata/raw/main/Story%201-8.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 1-9", "https://github.com/tksabum/Mapdata/raw/main/Story%201-9.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 1-10", "https://github.com/tksabum/Mapdata/raw/main/Story%201-10.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 2-1", "https://github.com/tksabum/Mapdata/raw/main/Story%202-1.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 2-2", "https://github.com/tksabum/Mapdata/raw/main/Story%202-2.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 2-3", "https://github.com/tksabum/Mapdata/raw/main/Story%202-3.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 2-4", "https://github.com/tksabum/Mapdata/raw/main/Story%202-4.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 2-5", "https://github.com/tksabum/Mapdata/raw/main/Story%202-5.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 2-6", "https://github.com/tksabum/Mapdata/raw/main/Story%202-6.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 2-7", "https://github.com/tksabum/Mapdata/raw/main/Story%202-7.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 2-8", "https://github.com/tksabum/Mapdata/raw/main/Story%202-8.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 2-9", "https://github.com/tksabum/Mapdata/raw/main/Story%202-9.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 2-10", "https://github.com/tksabum/Mapdata/raw/main/Story%202-10.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 3-1", "https://github.com/tksabum/Mapdata/raw/main/Story%203-1.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 3-2", "https://github.com/tksabum/Mapdata/raw/main/Story%203-2.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 3-3", "https://github.com/tksabum/Mapdata/raw/main/Story%203-3.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 3-4", "https://github.com/tksabum/Mapdata/raw/main/Story%203-4.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 3-5", "https://github.com/tksabum/Mapdata/raw/main/Story%203-5.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 3-6", "https://github.com/tksabum/Mapdata/raw/main/Story%203-6.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 3-7", "https://github.com/tksabum/Mapdata/raw/main/Story%203-7.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 3-8", "https://github.com/tksabum/Mapdata/raw/main/Story%203-8.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 3-9", "https://github.com/tksabum/Mapdata/raw/main/Story%203-9.dat"));
+        mapList.Add(new KeyValuePair<string, string>("Story 3-10", "https://github.com/tksabum/Mapdata/raw/main/Story%203-10.dat"));
+        
+        for (int i = 0; i < mapList.Count; i++)
+        {
+            bool existData = false;
+            bool downloadCheck = false;
+            if (File.Exists(dataPath + "/Mapdata/" + mapList[i].Key + ".dat"))
+            {
+                existData = true;
+            }
+            if (File.Exists(dataPath + "/Mapdata/" + mapList[i].Key + ".dlc"))
+            {
+                downloadCheck = true;
+            }
+            
+            if (!existData || downloadCheck)
+            {
+                File.WriteAllText(dataPath + "/Mapdata/" + mapList[i].Key + ".dlc", "");
 
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Directory.Delete(dataPath + "/Mapdata");
-                Debug.Log(request.error);
+                UnityWebRequest request = UnityWebRequest.Get(mapList[i].Value);
+
+                yield return request.SendWebRequest();
+
+                if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.Log(request.error);
+                }
+                else
+                {
+                    File.WriteAllBytes(dataPath + "/Mapdata/" + mapList[i].Key + ".dat", request.downloadHandler.data);
+                    File.Delete(dataPath + "/Mapdata/" + mapList[i].Key + ".dlc");
+                }
             }
-            else
-            {
-                int storyNum = (i / 10) + 1;
-                int mapNum = (i % 10) + 1;
-                File.WriteAllBytes(dataPath + "/Mapdata/Story " + storyNum + "-" + mapNum + ".dat", request.downloadHandler.data);
-            }
+
+            yield return null;
         }
         
         Refresh((int)State.TITLE);
