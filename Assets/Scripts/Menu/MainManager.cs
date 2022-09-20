@@ -37,7 +37,7 @@ public class MainManager : MonoBehaviour
 
     Queue<AudioSource> waitingAudioSource;
 
-    // ���� �ʿ�
+    // 저장 필요
     Vector2Int clearInfo;
 
     private void Awake()
@@ -48,7 +48,7 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Ŭ�������� ��������
+        // 클리어정보 가져오기
         clearInfo = new Vector2Int(PlayerPrefs.GetInt("clearInfo_storyNum", 0), PlayerPrefs.GetInt("clearInfo_mapNum", 10));
 
         Refresh((int)DataBus.Instance.ReadStartState());
@@ -98,8 +98,8 @@ public class MainManager : MonoBehaviour
 
     public void ButtonQuitGame()
     {
-        // �����Ϳ����� �÷��� ����
-        // �ۿ����� �� ����
+        // 에디터에서는 플레이 종료
+        // 앱에서는 앱 종료
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 
