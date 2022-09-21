@@ -288,6 +288,8 @@ public class MainManager : MonoBehaviour
                 if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
                 {
                     Debug.Log(request.error);
+                    i--;
+                    continue;
                 }
                 else
                 {
